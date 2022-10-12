@@ -18,7 +18,7 @@ export class ClientService{
     }
 
     public addClient(client : Client): Observable<Client> {
-        return this.http.post<Client>(`${this.apiServerUrl}/librarymanagementsystem/books/save_book` , client)
+        return this.http.post<Client>(`${this.apiServerUrl}/librarymanagementsystem/client/save_client` , client)
     }
 
     public UpdateClient(client : Client): Observable<Client> {

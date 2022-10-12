@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormGroup, NgForm } from '@angular/forms';
 import { ClientBook } from '../client-book/client-book';
 import { ClientBookService } from '../client-book/client-book.service';
 import { Client } from '../client/client';
@@ -24,7 +24,7 @@ export class BookComponent implements OnInit {
   ClientList: any;
   SelectedValue: any;
   SelectedBookId: any;
- 
+  
   constructor(private bookService: BookService, private clientService: ClientService, private clientBookService: ClientBookService){}
   ngOnInit() {
     this.getBooks();
