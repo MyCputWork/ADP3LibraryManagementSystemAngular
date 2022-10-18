@@ -22,7 +22,7 @@ export class ClientComponent implements OnInit {
     }
   };
 
-  constructor(public fb: FormBuilder, private http: HttpClient, private clientService: ClientService ) {
+  constructor(public fb: FormBuilder, private clientService: ClientService ) {
     this.form = this.fb.group({
       clientId: [''],
       firstName: [''],

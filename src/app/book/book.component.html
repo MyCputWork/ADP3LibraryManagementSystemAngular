@@ -1,6 +1,3 @@
-<!-- Selected value: {{SelectedValue}} -->
-
-
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
    <a class="navbar-brand" style="color:white;">Book Manager</a>
@@ -36,7 +33,7 @@
                      {{book.description}}
                   </div>
                   <p></p>
-                  <form #assignClientForm="ngForm" (ngSubmit)="AssignClientToBook(assignClientForm)">
+                  <form [formGroup]="form" (ngSubmit)="AssigningClientToBook()">
                      <div class="mt-10 ">
                         <div class="col-sm-15">
                            <select name="Client" (change)="ChangeBook($event)" class="form-control">
@@ -50,9 +47,9 @@
                            </select>
                         </div>
                         <input type="hidden" ngModel="{{SelectedValue}}" name="clientId" class="form-control"
-                           id="clientId" placeholder="clientId" value="">
+                           id="clientId" placeholder="clientId" value="" formControlName="clientId">
                         <input type="hidden" ngModel="{{book.bookId}}" name="bookId" class="form-control" id="bookId"
-                           placeholder="{{book.bookId}}" value="{{book.bookId}}">
+                           placeholder="{{book.bookId}}" value="{{book.bookId}}" formControlName="bookId">
                         <!-- <p ngModel name="clientId">{{SelectedValue}}</p> -->
                         <!-- <p ngModel name="bookId">{{book.bookId}}</p>  -->
                      </div>
@@ -104,9 +101,19 @@
                         required>
                   </div>
                   <div class="form-group">
-                     <label for="phone">Book Author</label>
+                     <label for="phone">Author</label>
                      <input type="text" ngModel name="author" class="form-control" id="author" placeholder="author"
                         required>
+                  </div>
+                  <div class="form-group">
+                     <label for="phone">Author(2)</label>
+                     <input type="text" ngModel name="author2" class="form-control" id="author2" placeholder="author 2"
+                        >
+                  </div>
+                  <div class="form-group">
+                     <label for="phone">Author(3)</label>
+                     <input type="text" ngModel name="author3" class="form-control" id="author3" placeholder="author 3"
+                        >
                   </div>
                   <div class="form-group">
                      <label for="phone">Book Description</label>
@@ -150,42 +157,54 @@
 
                   <div class="form-group">
                      <label for="name">Name</label>
-                     <input type="text" ngModel="{{editBook?.bookName}}" name="name" class="form-control" id="name"
+                     <input type="text" ngModel="{{editBook?.bookName}}" name="bookName" class="form-control" id="bookName"
                         aria-describedby="emailHelp" placeholder="Name">
                   </div>
 
-                  <input type="hidden" ngModel="{{editBook?.bookId}}" name="id" class="form-control" id="id"
+                  <input type="hidden" ngModel="{{editBook?.bookId}}" name="bookId" class="form-control" id="id"
                      placeholder="Email">
 
                   <div class="form-group">
                      <label for="phone">Genre</label>
-                     <input type="text" ngModel="{{editBook?.genre}}" name="jobTitle" class="form-control" id="jobTitle"
+                     <input type="text" ngModel="{{editBook?.genre}}" name="genre" class="form-control" id="jobTitle"
                         placeholder="Job title">
                   </div>
 
                   <div class="form-group">
                      <label for="phone">Author</label>
-                     <input type="text" ngModel="{{editBook?.author}}" name="phone" class="form-control" id="phone"
-                        name="phone" placeholder="Phone">
+                     <input type="text" ngModel="{{editBook?.author}}" name="author" class="form-control" id="author"
+                         placeholder="Phone">
+                  </div>
+
+                  <div class="form-group">
+                     <label for="phone">Author(2)</label>
+                     <input type="text" ngModel="{{editBook?.author2}}" name="author2" class="form-control" id="author2"
+                         placeholder="author 2">
+                  </div>
+
+                  <div class="form-group">
+                     <label for="phone">Author(3)</label>
+                     <input type="text" ngModel="{{editBook?.author3}}" name="author3" class="form-control" id="author3"
+                         placeholder="author 3">
                   </div>
 
                   <div class="form-group">
                      <label for="phone">Description</label>
                      <input type="text" ngModel="{{editBook?.description}}" name="description" class="form-control"
-                        id="description" name="description" placeholder="description">
+                        id="description" placeholder="description">
                   </div>
 
 
                   <div class="form-group">
                      <label for="phone">Is Rented</label>
                      <input type="text" ngModel="{{editBook?.isRented}}" name="isRented" class="form-control"
-                        id="isRented" placeholder="Borrwed status">
+                        id="isRented" placeholder="Borrowed status">
                   </div>
 
                   <div class="form-group">
                      <label for="phone">Image URL</label>
-                     <input type="text" ngModel="{{editBook?.imgUrl}}" name="imageUrl" class="form-control"
-                        id="imageUrl" placeholder="Image URL">
+                     <input type="text" ngModel="{{editBook?.imgUrl}}" name="imgUrl" class="form-control"
+                        id="imgUrl" placeholder="Image URL">
                   </div>
 
 

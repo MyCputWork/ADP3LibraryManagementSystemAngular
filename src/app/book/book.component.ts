@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { ClientBook } from '../client-book/client-book';
 import { ClientBookService } from '../client-book/client-book.service';
 import { Client } from '../client/client';
@@ -24,8 +24,27 @@ export class BookComponent implements OnInit {
   ClientList: any;
   SelectedValue: any;
   SelectedBookId: any;
+  form: FormGroup;
+  dateBorrowed = new Date();
+
+  clientBook: ClientBook = {
+    dateOrdered: '',
+    clients: {
+      clientId: ''
+    },
+    books: {
+      bookId: ''
+    }
+  }
   
-  constructor(private bookService: BookService, private clientService: ClientService, private clientBookService: ClientBookService){}
+  constructor(private bookService: BookService, private clientService: ClientService,
+     private clientBookService: ClientBookService, public fb: FormBuilder){
+      this.form= this.fb.group({
+        clientId: [''],
+        bookId: ['']
+      });
+
+     }
   ngOnInit() {
     this.getBooks();
     this.clientService.getClients().subscribe((data: any)=> {
@@ -33,11 +52,9 @@ export class BookComponent implements OnInit {
     })
   }
 
-  ChangeBook(e){
-    console.log(e.target.value);
-    this.SelectedValue= e.target.value;
-  }
+  //get methods
 
+  //to display in combo box
   public getClients(): void {
     this.clientService.getClients().subscribe(
       (response: Client[]) => {
@@ -51,18 +68,7 @@ export class BookComponent implements OnInit {
     );
   }
 
-  public AssignClientToBook(assignClientForm: NgForm): void{
-    this.clientBookService.addClient(assignClientForm.value).subscribe(
-      (response: ClientBook) => {
-        console.log(response);
-        this.getBooks();
-      },
-      (error: HttpErrorResponse) => {
-        alert(error.message);
-      }
-    );
-  }
-
+  
   public getBooks(): void {
     this.bookService.getBooks().subscribe(
       (response: Book[]) => {
@@ -74,6 +80,56 @@ export class BookComponent implements OnInit {
       }
     );
   }
+
+  //add methods
+  // public AssignClientToBook(assignClientForm: NgForm): void{
+  //   this.clientBookService.addClientBook(assignClientForm.value).subscribe(
+  //     (response: ClientBook) => {
+  //       console.log(response);
+  //       this.getBooks();
+  //     },
+  //     (error: HttpErrorResponse) => {
+  //       alert(error.message);
+  //     }
+  //   );
+  // }
+
+  public AssigningClientToBook(){
+    var formData: any = new FormData();
+    formData.append('clientId', this.form.get('clientId').value);
+    formData.append('bookId', this.form.get('bookId').value);
+
+    console.log(formData.get("clientId"));
+
+    this.clientBook.clients.clientId = formData.get("clientId");
+    this.clientBook.books.bookId = formData.get("bookId");
+    this.clientBook.dateOrdered = this.dateBorrowed.toUTCString();
+
+    this.clientBookService.addClientBook(this.clientBook).subscribe(
+      (response: ClientBook) => {
+        console.log(response);
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+
+    this.bookService.updateBookAvailability(this.clientBook.books.bookId).subscribe(
+      (response: void) => {
+        console.log(response);
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );;
+
+    this.getBooks()
+  }
+  
+
+
+
+
 
 
   public onAddBook(addForm: NgForm): void {
@@ -92,6 +148,8 @@ export class BookComponent implements OnInit {
     );
   }
 
+  //update methods
+
   public onUpdateBook(book: Book): void {
     this.bookService.UpdateBook(book).subscribe(
       (response: Book) => {
@@ -104,6 +162,7 @@ export class BookComponent implements OnInit {
     );
   }
 
+  //delete methods
   public onDeleteBook(bookId: string): void {
     this.bookService.deleteBook(bookId).subscribe(
       (response: void) => {
@@ -116,6 +175,12 @@ export class BookComponent implements OnInit {
     );
   }
 
+
+  //misc
+  ChangeBook(e){
+    console.log(e.target.value);
+    this.SelectedValue= e.target.value;
+  }
 
   public searchBooks(key: string): void {
     console.log(key);

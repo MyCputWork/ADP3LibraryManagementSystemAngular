@@ -17,7 +17,8 @@ import { HomePageComponent } from './home-page/home-page.component';
     ClientComponent,
     BookComponent,
     ClientBookComponent,
-    HomePageComponent
+    HomePageComponent,
+    ClientBookComponent
     
   ],
   imports: [
