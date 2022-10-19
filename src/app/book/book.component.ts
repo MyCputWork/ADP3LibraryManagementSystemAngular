@@ -1,6 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm } from '@angular/forms';
+import { Author } from '../author/author';
+import { AuthorService } from '../author/author.service';
 import { ClientBook } from '../client-book/client-book';
 import { ClientBookService } from '../client-book/client-book.service';
 import { Client } from '../client/client';
@@ -19,10 +21,13 @@ export class BookComponent implements OnInit {
   public editBook: Book;
   public deleteBook: Book;
   public clients: Client[];
+  public authors: Author[];
 
   BookList: any;
   ClientList: any;
+  AuthorList: any;
   SelectedValue: any;
+  SelectedValueAuthor: any;
   SelectedBookId: any;
   form: FormGroup;
   dateBorrowed = new Date();
@@ -38,7 +43,7 @@ export class BookComponent implements OnInit {
   }
   
   constructor(private bookService: BookService, private clientService: ClientService,
-     private clientBookService: ClientBookService, public fb: FormBuilder){
+     private clientBookService: ClientBookService, public fb: FormBuilder, private authorService: AuthorService){
       this.form= this.fb.group({
         clientId: [''],
         bookId: ['']
@@ -50,6 +55,9 @@ export class BookComponent implements OnInit {
     this.clientService.getClients().subscribe((data: any)=> {
       this.ClientList= data;
     })
+    this.authorService.getAuthors().subscribe((data: any) =>{
+      this.AuthorList= data
+    })
   }
 
   //get methods
@@ -60,7 +68,18 @@ export class BookComponent implements OnInit {
       (response: Client[]) => {
         this.clients = response;
         console.log(this.clients);
-        //this.SendToArray(response);
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+  }
+
+  public getAuthors(): void {
+    this.authorService.getAuthors().subscribe(
+      (response: Author[]) => {
+        this.authors = response;
+        console.log(this.authors);
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -121,7 +140,7 @@ export class BookComponent implements OnInit {
       (error: HttpErrorResponse) => {
         alert(error.message);
       }
-    );;
+    );
 
     this.getBooks()
   }
@@ -133,6 +152,7 @@ export class BookComponent implements OnInit {
 
 
   public onAddBook(addForm: NgForm): void {
+    console.log(this.form.value);
     document.getElementById('add-book-form').click();
     console.log(addForm.value + "------------------------------");
     this.bookService.addBook(addForm.value).subscribe(
@@ -180,6 +200,11 @@ export class BookComponent implements OnInit {
   ChangeBook(e){
     console.log(e.target.value);
     this.SelectedValue= e.target.value;
+  }
+
+  ChangeAuthor(e){
+    console.log(e.target.value);
+    this.SelectedValueAuthor= e.target.value;
   }
 
   public searchBooks(key: string): void {
