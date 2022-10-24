@@ -23,6 +23,22 @@ export class BookComponent implements OnInit {
   public clients: Client[];
   public authors: Author[];
 
+  AssignClientsHtml:boolean=true;
+  book: Book = {
+    bookId: '',
+    bookName: '',
+    author: '',
+    author2: '',
+    author3: '',
+    genre: '',
+    description: '',
+    isRented: '',
+    imgUrl: '',
+  }
+
+
+  addBookForm: FormGroup;
+  editBookForm: FormGroup;
   BookList: any;
   ClientList: any;
   AuthorList: any;
@@ -43,15 +59,38 @@ export class BookComponent implements OnInit {
   }
   
   constructor(private bookService: BookService, private clientService: ClientService,
-     private clientBookService: ClientBookService, public fb: FormBuilder, private authorService: AuthorService){
+     private clientBookService: ClientBookService, public fb: FormBuilder, private authorService: AuthorService,
+     public addbookfb: FormBuilder, public editbookfb: FormBuilder ){
       this.form= this.fb.group({
         clientId: [''],
         bookId: ['']
       });
+      this.addBookForm = this.addbookfb.group({
+        bookId: [''],
+        bookName: [''],
+        author: [''],
+        author2: [''],
+        author3: [''],
+        genre: [''],
+        description: [''],
+        isRented: [''],
+        imgUrl: [''],
+      })
+      this.editBookForm= this.editbookfb.group({
+        bookId: [''],
+        bookName: [''],
+        author: [''],
+        author2: [''],
+        author3: [''],
+        genre: [''],
+        description: [''],
+        isRented: [''],
+        imgUrl: ['']
+      })
 
      }
   ngOnInit() {
-    this.getBooks();
+    this.getBooks('Available');
     this.clientService.getClients().subscribe((data: any)=> {
       this.ClientList= data;
     })
@@ -59,6 +98,15 @@ export class BookComponent implements OnInit {
       this.AuthorList= data
     })
   }
+
+  ToggleAssignClient(){
+    this.AssignClientsHtml = !this.AssignClientsHtml;
+    if(this.AssignClientsHtml == false){
+      this.getBooks('Not Available')
+    }else{
+      this.getBooks('Available')
+    }
+}
 
   //get methods
 
@@ -88,8 +136,10 @@ export class BookComponent implements OnInit {
   }
 
   
-  public getBooks(): void {
-    this.bookService.getBooks().subscribe(
+  public getBooks(availability: string): void {
+    
+    //this.bookService.getBooks().subscribe(
+      this.bookService.getBookByAvailability(availability).subscribe(
       (response: Book[]) => {
         this.books = response;
         console.log(this.books);
@@ -101,6 +151,8 @@ export class BookComponent implements OnInit {
   }
 
   //add methods
+
+
   // public AssignClientToBook(assignClientForm: NgForm): void{
   //   this.clientBookService.addClientBook(assignClientForm.value).subscribe(
   //     (response: ClientBook) => {
@@ -142,15 +194,9 @@ export class BookComponent implements OnInit {
       }
     );
 
-    this.getBooks()
+    this.getBooks('Available')
   }
   
-
-
-
-
-
-
   public onAddBook(addForm: NgForm): void {
     console.log(this.form.value);
     document.getElementById('add-book-form').click();
@@ -158,7 +204,7 @@ export class BookComponent implements OnInit {
     this.bookService.addBook(addForm.value).subscribe(
       (response: Book) => {
         console.log(response);
-        this.getBooks();
+        this.getBooks('Available');
         addForm.reset();
       },
       (error: HttpErrorResponse) => {
@@ -168,13 +214,88 @@ export class BookComponent implements OnInit {
     );
   }
 
+  public addBook(){
+    document.getElementById('add-book-form').click();
+    var formData: any = new FormData();
+    formData.append('bookId', this.addBookForm.get('bookId').value);
+    formData.append('bookName', this.addBookForm.get('bookName').value);
+    formData.append('author', this.addBookForm.get('author').value);
+    formData.append('author2', this.addBookForm.get('author2').value);
+    formData.append('author3', this.addBookForm.get('author3').value);
+    formData.append('genre', this.addBookForm.get('genre').value);
+    formData.append('description', this.addBookForm.get('description').value);
+    formData.append('isRented', this.addBookForm.get('isRented').value);
+    formData.append('imgUrl', this.addBookForm.get('imgUrl').value);
+    console.log(formData.get("author"));
+
+    this.book.bookId= formData.get("bookId");
+    this.book.bookName= formData.get("bookName");
+    this.book.author= formData.get("author");
+    this.book.author2= formData.get("author2");
+    this.book.author3= formData.get("author3");
+    this.book.genre= formData.get("genre");
+    this.book.description= formData.get("description");
+    this.book.isRented = formData.get("isRented");
+    this.book.imgUrl = formData.get("imgUrl");
+
+    this.bookService.addBook(this.book).subscribe(
+      (response: Book) => {
+        console.log(response);
+        this.getBooks('Available');
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+        this.getBooks('Available');
+      }
+    );
+    this.getBooks('Available');
+  }
+
   //update methods
+
+  public updateBook(){
+    document.getElementById('close-edit').click();
+    var formData: any = new FormData();
+    formData.append('bookId', this.editBookForm.get('bookId').value);
+    formData.append('bookName', this.editBookForm.get('bookName').value);
+    formData.append('author', this.editBookForm.get('author').value);
+    formData.append('author2', this.editBookForm.get('author2').value);
+    formData.append('author3', this.editBookForm.get('author3').value);
+    formData.append('genre', this.editBookForm.get('genre').value);
+    formData.append('description', this.editBookForm.get('description').value);
+    formData.append('isRented', this.editBookForm.get('isRented').value);
+    formData.append('imgUrl', this.editBookForm.get('imgUrl').value);
+    console.log(formData.get("author"));
+
+    this.book.bookId= formData.get("bookId");
+    this.book.bookName= formData.get("bookName");
+    this.book.author= formData.get("author");
+    this.book.author2= formData.get("author2");
+    this.book.author3= formData.get("author3");
+    this.book.genre= formData.get("genre");
+    this.book.description= formData.get("description");
+    this.book.isRented = formData.get("isRented");
+    this.book.imgUrl = formData.get("imgUrl");
+
+    this.bookService.UpdateBook(this.book).subscribe(
+      (response: Book) => {
+        console.log(response);
+        this.getBooks('Available');
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+        this.getBooks('Available');
+      }
+    );
+    this.getBooks('Available');
+
+  }
 
   public onUpdateBook(book: Book): void {
     this.bookService.UpdateBook(book).subscribe(
       (response: Book) => {
         console.log(response);
-        this.getBooks();
+        this.getBooks('Available');
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -187,7 +308,7 @@ export class BookComponent implements OnInit {
     this.bookService.deleteBook(bookId).subscribe(
       (response: void) => {
         console.log(response);
-        this.getBooks();
+        this.getBooks('Available');
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -219,7 +340,7 @@ export class BookComponent implements OnInit {
     }
     this.books = results;
     if (results.length === 0 || !key) {
-      this.getBooks();
+      this.getBooks('Available');
     }
   }
 

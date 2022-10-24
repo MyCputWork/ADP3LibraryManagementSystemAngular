@@ -33,4 +33,8 @@ export class BookService{
         console.log("entered updatebookav function");
         return this.http.put<void>(`${this.apiServerUrl}/librarymanagementsystem/books/updateBookAvailability/${bookId} `, null)
     }
+
+    public getBookByAvailability(availability: string): Observable<Book[]> {
+        return this.http.get<Book[]>(`${this.apiServerUrl}/librarymanagementsystem/books/findByIsRented/${availability}`)
+    }
 }
