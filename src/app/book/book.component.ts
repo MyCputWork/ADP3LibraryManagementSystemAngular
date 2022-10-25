@@ -23,7 +23,7 @@ export class BookComponent implements OnInit {
   public editBook: Book;
   public deleteBook: Book;
   public clients: Client[];
-  public authors: Author[];
+public authors: Author[];
   public genres: Genre[];
 
   AssignClientsHtml:boolean=true;
@@ -41,10 +41,9 @@ export class BookComponent implements OnInit {
     imgUrl: '',
   }
 
-
   addBookForm: FormGroup;
   editBookForm: FormGroup;
-  BookList: any;
+BookList: any;
   ClientList: any;
   AuthorList: any;
   GenreList: any;
@@ -101,8 +100,8 @@ export class BookComponent implements OnInit {
 
      }
   ngOnInit() {
-    this.getBooks('Available');
-    this.clientService.getClients().subscribe((data: any)=> {
+    this.getBooks();
+    this.clientService.getAllClients().subscribe((data: any)=> {
       this.ClientList= data;
     })
     this.authorService.getAuthors().subscribe((data: any) =>{
@@ -127,7 +126,7 @@ export class BookComponent implements OnInit {
 
   //to display in combo box
   public getClients(): void {
-    this.clientService.getClients().subscribe(
+    this.clientService.getAllClients().subscribe(
       (response: Client[]) => {
         this.clients = response;
         console.log(this.clients);

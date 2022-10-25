@@ -10,7 +10,7 @@ import { ClientBook } from "./client-book";
 })
 
 export class ClientBookService{
-private apiServerUrl = environment.apiBaseUrl;
+private apiServerUrl = environment.baseURL;
 
 constructor(private http: HttpClient){ }
 

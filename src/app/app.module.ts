@@ -1,30 +1,36 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
-
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { BookComponent } from './book/book.component';
-import { ClientComponent } from './client/client.component';
-import { ClientBookComponent } from './client-book/client-book.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ClientBookComponent } from './client-book/client-book.component';
+import { BookComponent } from './book/book.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { AuthorComponent } from './author/author.component';
 import { GenreComponent } from './genre/genre.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { ClientComponent } from './client/client.component';
+import { ClientAddressComponent } from './client-address/client-address.component';
+import { AddressComponent } from './address/address.component';
+import { CityComponent } from './city/city.component';
+import { ClientContactComponent } from './client-contact/client-contact.component';
+import { ContactComponent } from './contact/contact.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    ClientComponent,
-    BookComponent,
-    ClientBookComponent,
-    HomePageComponent,
+    //AppComponent,
     ClientBookComponent,
     AuthorComponent,
     GenreComponent,
-    NavbarComponent
+    NavbarComponent,
+    BookComponent,
+    HomePageComponent,
+    ClientComponent,
+    ClientAddressComponent,
+    AddressComponent,
+    CityComponent,
+    ClientContactComponent,
+    ContactComponent
     
   ],
   imports: [
@@ -35,6 +41,6 @@ import { NavbarComponent } from './navbar/navbar.component';
     ReactiveFormsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [ClientComponent]
 })
 export class AppModule { }
