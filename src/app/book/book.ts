@@ -5,6 +5,8 @@ export interface Book {
     author2: string;
     author3: string;
     genre: string;
+    genre2: string;
+    genre3: string;
     description: string;
     isRented: string;
     imgUrl: string;

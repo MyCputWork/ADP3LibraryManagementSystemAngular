@@ -7,6 +7,8 @@ import { ClientBook } from '../client-book/client-book';
 import { ClientBookService } from '../client-book/client-book.service';
 import { Client } from '../client/client';
 import { ClientService } from '../client/client.service';
+import { Genre } from '../genre/genre';
+import { GenreService } from '../genre/genre.service';
 import { Book } from './book';
 import { BookService } from './book.service';
 
@@ -22,6 +24,7 @@ export class BookComponent implements OnInit {
   public deleteBook: Book;
   public clients: Client[];
   public authors: Author[];
+  public genres: Genre[];
 
   AssignClientsHtml:boolean=true;
   book: Book = {
@@ -31,6 +34,8 @@ export class BookComponent implements OnInit {
     author2: '',
     author3: '',
     genre: '',
+    genre2: '',
+    genre3: '',
     description: '',
     isRented: '',
     imgUrl: '',
@@ -42,8 +47,10 @@ export class BookComponent implements OnInit {
   BookList: any;
   ClientList: any;
   AuthorList: any;
+  GenreList: any;
   SelectedValue: any;
   SelectedValueAuthor: any;
+  SelectedValueGenre: any;
   SelectedBookId: any;
   form: FormGroup;
   dateBorrowed = new Date();
@@ -60,7 +67,7 @@ export class BookComponent implements OnInit {
   
   constructor(private bookService: BookService, private clientService: ClientService,
      private clientBookService: ClientBookService, public fb: FormBuilder, private authorService: AuthorService,
-     public addbookfb: FormBuilder, public editbookfb: FormBuilder ){
+     public addbookfb: FormBuilder, public editbookfb: FormBuilder, public genreService: GenreService ){
       this.form= this.fb.group({
         clientId: [''],
         bookId: ['']
@@ -72,6 +79,8 @@ export class BookComponent implements OnInit {
         author2: [''],
         author3: [''],
         genre: [''],
+        genre2: [''],
+        genre3: [''],
         description: [''],
         isRented: [''],
         imgUrl: [''],
@@ -83,6 +92,8 @@ export class BookComponent implements OnInit {
         author2: [''],
         author3: [''],
         genre: [''],
+        genre2: [''],
+        genre3: [''],
         description: [''],
         isRented: [''],
         imgUrl: ['']
@@ -96,6 +107,10 @@ export class BookComponent implements OnInit {
     })
     this.authorService.getAuthors().subscribe((data: any) =>{
       this.AuthorList= data
+    })
+
+    this.genreService.getGenres().subscribe((data: any) =>{
+      this.GenreList= data
     })
   }
 
@@ -134,6 +149,20 @@ export class BookComponent implements OnInit {
       }
     );
   }
+
+  public getGenres(): void {
+    this.genreService.getGenres().subscribe(
+      (response: Genre[]) => {
+        this.genres = response;
+        console.log(this.genres);
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+  }
+
+
 
   
   public getBooks(availability: string): void {
@@ -223,6 +252,8 @@ export class BookComponent implements OnInit {
     formData.append('author2', this.addBookForm.get('author2').value);
     formData.append('author3', this.addBookForm.get('author3').value);
     formData.append('genre', this.addBookForm.get('genre').value);
+    formData.append('genre', this.addBookForm.get('genre2').value);
+    formData.append('genre', this.addBookForm.get('genre3').value);
     formData.append('description', this.addBookForm.get('description').value);
     formData.append('isRented', this.addBookForm.get('isRented').value);
     formData.append('imgUrl', this.addBookForm.get('imgUrl').value);
@@ -234,6 +265,8 @@ export class BookComponent implements OnInit {
     this.book.author2= formData.get("author2");
     this.book.author3= formData.get("author3");
     this.book.genre= formData.get("genre");
+    this.book.genre2= formData.get("genre2");
+    this.book.genre3= formData.get("genre3");
     this.book.description= formData.get("description");
     this.book.isRented = formData.get("isRented");
     this.book.imgUrl = formData.get("imgUrl");
@@ -262,6 +295,8 @@ export class BookComponent implements OnInit {
     formData.append('author2', this.editBookForm.get('author2').value);
     formData.append('author3', this.editBookForm.get('author3').value);
     formData.append('genre', this.editBookForm.get('genre').value);
+    formData.append('genre2', this.editBookForm.get('genre2').value);
+    formData.append('genre3', this.editBookForm.get('genre3').value);
     formData.append('description', this.editBookForm.get('description').value);
     formData.append('isRented', this.editBookForm.get('isRented').value);
     formData.append('imgUrl', this.editBookForm.get('imgUrl').value);
@@ -273,6 +308,8 @@ export class BookComponent implements OnInit {
     this.book.author2= formData.get("author2");
     this.book.author3= formData.get("author3");
     this.book.genre= formData.get("genre");
+    this.book.genre2= formData.get("genre2");
+    this.book.genre3= formData.get("genre3");
     this.book.description= formData.get("description");
     this.book.isRented = formData.get("isRented");
     this.book.imgUrl = formData.get("imgUrl");
@@ -328,13 +365,22 @@ export class BookComponent implements OnInit {
     this.SelectedValueAuthor= e.target.value;
   }
 
+  ChangeGenre(e){
+    console.log(e.target.value);
+    this.SelectedValueGenre= e.target.value;
+  }
+
   public searchBooks(key: string): void {
     console.log(key);
     const results: Book[] = [];
     for (const book of this.books) {
       if (book.bookName.toLowerCase().indexOf(key.toLowerCase()) !== -1
       || book.author.toLowerCase().indexOf(key.toLowerCase()) !== -1
-      || book.genre.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+      || book.genre.toLowerCase().indexOf(key.toLowerCase()) !== -1
+      || book.genre2.toLowerCase().indexOf(key.toLowerCase()) !== -1
+      || book.genre3.toLowerCase().indexOf(key.toLowerCase()) !== -1
+      || book.author2.toLowerCase().indexOf(key.toLowerCase()) !== -1
+      || book.author3.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
         results.push(book);
       }
     }

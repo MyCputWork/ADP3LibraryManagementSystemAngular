@@ -21,12 +21,12 @@ export class AuthorService{
         return this.http.post<Author>(`${this.apiServerUrl}/librarymanagementsystem/author/save_author` , author)
     }
 
-    public UpdateBook(author : Author): Observable<Author> {
+    public UpdateAuthor(author : Author): Observable<Author> {
         return this.http.put<Author>(`${this.apiServerUrl}/librarymanagementsystem/author/update_author` , author)
     }
 
-    public deleteBook(authorId : string): Observable<void> {
-        return this.http.delete<void>(`${this.apiServerUrl}/librarymanagementsystem/author/deleteBook/${authorId}`)
+    public deleteAuthor(authorId : string): Observable<void> {
+        return this.http.delete<void>(`${this.apiServerUrl}/librarymanagementsystem/author/deleteAuthor/${authorId}`)
     }
 
 
