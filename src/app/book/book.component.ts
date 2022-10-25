@@ -100,7 +100,7 @@ BookList: any;
 
      }
   ngOnInit() {
-    this.getBooks();
+    this.getBooks('Available');
     this.clientService.getAllClients().subscribe((data: any)=> {
       this.ClientList= data;
     })

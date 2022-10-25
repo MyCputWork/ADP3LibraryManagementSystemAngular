@@ -1,12 +1,10 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppRoutingModule } from './app-routing.module';import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClientBookComponent } from './client-book/client-book.component';
 import { BookComponent } from './book/book.component';
-import { HomePageComponent } from './home-page/home-page.component';
-import { AuthorComponent } from './author/author.component';
+import { HomePageComponent } from './home-page/home-page.component';import { AuthorComponent } from './author/author.component';
 import { GenreComponent } from './genre/genre.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ClientComponent } from './client/client.component';
@@ -18,8 +16,7 @@ import { ContactComponent } from './contact/contact.component';
 
 @NgModule({
   declarations: [
-    //AppComponent,
-    ClientBookComponent,
+  ClientBookComponent,
     AuthorComponent,
     GenreComponent,
     NavbarComponent,
@@ -30,7 +27,7 @@ import { ContactComponent } from './contact/contact.component';
     AddressComponent,
     CityComponent,
     ClientContactComponent,
-    ContactComponent
+ContactComponent
     
   ],
   imports: [
