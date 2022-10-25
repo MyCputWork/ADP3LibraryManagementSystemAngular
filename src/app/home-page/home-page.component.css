@@ -75,3 +75,15 @@
   font-weight: 100;
   line-height: 25px;
 }
+.outlet{
+  text-align: center;
+  color:aliceblue;
+  transform:translateY(-50%);
+  align-content: center;
+  justify-content: center;
+  margin: auto;
+  width: 60%;
+  padding: 10px;
+
+
+}

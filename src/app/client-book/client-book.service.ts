@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { HttpClient } from '@angular/common/http';
 import { environment } from "src/environments/environment";
 import { ClientBook } from "./client-book";
+import { Client } from "../client/client";
 
 @Injectable({
     providedIn: 'root'
@@ -29,4 +30,8 @@ public addClient(clientBook : ClientBook): Observable<ClientBook> {
 // public deleteClient(clientBookId : string): Observable<void> {
 //     return this.http.delete<void>(`${this.apiServerUrl}/librarymanagementsystem/books/deleteBook/${clientId}`)
 // }
+
+public getClientBooksByClient(client : Client): Observable<ClientBook[]> {
+  return this.http.get<ClientBook[]>(`${this.apiServerUrl}/librarymanagementsystem/clientBook/findClientBookByClient/${client}`)
+}
 }
