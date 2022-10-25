@@ -1,7 +1,10 @@
 <label for="clients">Choose a client:</label>
-<select name="clients" id="clients"    *ngFor="let item of clients">
-  <option [value]="item?.clientId" (click)="getClientBooksByClient(item)" >{{item?.name?.firstName}} {{item?.name?.middleName}}  {{item?.name?.lastName }}</option>
-</select>
+
+  <select name="clients" id="clients"   >
+    <option [value]="item?.clientId" (click)="getClientBooksByClient(item)" *ngFor="let item of clients" >{{item?.name?.firstName}} {{item?.name?.middleName}}  {{item?.name?.lastName }}</option>
+  </select>
+
+
 <table class="table">
     <tr>
       <th>Client ID</th>
