@@ -9,7 +9,7 @@ import { Genre } from "./genre";
 })
 
 export class GenreService{
-    private apiServerUrl = environment.apiBaseUrl;
+    private apiServerUrl = environment.baseURL;
 
     constructor(private http: HttpClient){ }
 
