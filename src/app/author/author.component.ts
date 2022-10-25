@@ -72,7 +72,7 @@ export class AuthorComponent implements OnInit {
 
     console.log(formData.get("authorId"));
 
-    this.author.authorId= formData.get("clientId");
+    this.author.authorId= formData.get("authorId");
     this.author.name.firstName= formData.get("firstName");
     this.author.name.middleName= formData.get("middleName");
     this.author.name.lastName= formData.get("lastName");

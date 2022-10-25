@@ -1,17 +1,35 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.0/css/boxicons.min.css" integrity="sha512-pVCM5+SN2+qwj36KonHToF2p1oIvoU3bsqxphdOIWMYmgr4ZqD3t5DjKvvetKhXGc/ZG5REYTT6ltKfExEei/Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css" integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous" />
 
+<app-navbar></app-navbar>
 <div class="container" id="main-container">
-    <div class="row align-items-center">
+
+    <div class="ml-5 mb-4">
+        <table class="table bordeless">
+           <tr>
+              <td>
+                 <label for="exampleInputEmail1">Genre Id</label>
+                 <input style="width: 60%;" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                    placeholder="Filter by Genre Id">
+              </td>
+              <td>
+                 <label for="exampleInputEmail1">Genre Name</label>
+                 <input style="width: 60%;" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                    placeholder="Filter by Genre Name">
+              </td>
+           </tr>
+        </table>
+     </div>
+    <div class="row align-items-center mr-5">
         <div class="col-md-6">
             <div class="mb-3">
-                <h5 class="card-title">Contact List </h5>
+                <h5 class="card-title">Genre List </h5>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3">
-                <div>
-                    <ul class="nav nav-pills">
+        <div class="col-md-6 ">
+            <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3 mr-5">
+                <div class="mr-5">
+                    <ul class="nav nav-pills ">
                         <li class="nav-item">
                             <a
                                 aria-current="page"
@@ -53,25 +71,15 @@
                     <table class="table project-list-table table-nowrap align-middle table-borderless">
                         <thead>
                             <tr>
-                                <th scope="col" class="ps-4" style="width: 50px;">
-                                    <div class="form-check font-size-16"><input type="checkbox" class="form-check-input" id="contacusercheck" /><label class="form-check-label" for="contacusercheck"></label></div>
-                                </th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Position</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Projects</th>
-                                <th scope="col" style="width: 200px;">Action</th>
+                                <th scope="col">Genre ID</th>
+                                <th scope="col" >Genre Name</th>
+                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let genre of genres">
-                                <th scope="row" class="ps-4">
-                                    <div class="form-check font-size-16"><input type="checkbox" class="form-check-input" id="contacusercheck1" /><label class="form-check-label" for="contacusercheck1"></label></div>
-                                </th>
-                                <td><img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="avatar-sm rounded-circle me-2" /><a href="#" class="text-body">{{genre.genreName}}</a></td>
-                                <td><span class="badge badge-soft-success mb-0">Full Stack Developer</span></td>
-                                <td>SimonRyles@minible.com</td>
-                                <td>{{genre.genreId}}</td>
+                                <td><span class="badge badge-soft-success mb-0 ">{{genre.genreId}}</span></td>
+                                <td class="">{{genre.genreName}}</td>
                                 <td>
                                     <ul class="list-inline mb-0">
                                         <li class="list-inline-item">
