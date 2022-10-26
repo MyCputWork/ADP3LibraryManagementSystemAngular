@@ -15,6 +15,10 @@ import { ClientContactComponent } from './client-contact/client-contact.componen
 import { ContactComponent } from './contact/contact.component';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
+import { LoginComponent } from './auth/login/login.component';
+import { SignupComponent } from './auth/signup/signup.component';
+import { UserDashboardComponent } from './component/user-dashboard/user-dashboard.component';
+import { AdminDashboardComponent } from './component/admin-dashboard/admin-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +34,11 @@ import { AppComponent } from './app.component';
     AddressComponent,
     CityComponent,
     ClientContactComponent,
-ContactComponent
+ContactComponent,
+LoginComponent,
+    SignupComponent,
+    UserDashboardComponent,
+    AdminDashboardComponent
     
   ],
   imports: [
