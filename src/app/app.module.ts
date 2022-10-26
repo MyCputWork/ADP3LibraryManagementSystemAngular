@@ -13,9 +13,12 @@ import { AddressComponent } from './address/address.component';
 import { CityComponent } from './city/city.component';
 import { ClientContactComponent } from './client-contact/client-contact.component';
 import { ContactComponent } from './contact/contact.component';
+import { RouterModule } from '@angular/router';
+import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [
+    AppComponent,
   ClientBookComponent,
     AuthorComponent,
     GenreComponent,
@@ -35,7 +38,8 @@ ContactComponent
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule
   ],
   providers: [],
   bootstrap: [ClientComponent]
