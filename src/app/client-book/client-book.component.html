@@ -7,13 +7,21 @@
 
 <table class="table">
     <tr>
-      <th>Client ID</th>
-      <th>Book ID</th>
+      <th>Image</th>
+      <th>Book</th>
+      <th>Client</th>
+      <th>Date Ordered</th>
+      <th>Action</th>
     </tr>
     <tr *ngFor="let item of clientBooks">
-      <td>{{item?.clientId}}</td>
-      <td>{{item?.bookId}}</td>
+      <td>{{item?.books?.imgUrl}}</td>
+      <td>{{item?.books?.bookName}}</td>
+      <td>{{item?.clients?.name?.firstName}}{{item?.clients?.name?.middleName}}{{item?.clients?.name?.lastName}}</td>
+      <td>{{item?.dateOrdered}}</td>
+      <td><span class="editBtn">edit</span>&nbsp;<span color="deleteBtn">delete</span></td>
 
     </tr>
 
   </table>
+
+

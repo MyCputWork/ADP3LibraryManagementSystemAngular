@@ -1,0 +1,269 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.0/css/boxicons.min.css"
+   integrity="sha512-pVCM5+SN2+qwj36KonHToF2p1oIvoU3bsqxphdOIWMYmgr4ZqD3t5DjKvvetKhXGc/ZG5REYTT6ltKfExEei/Q=="
+   crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet"
+   href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css"
+   integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous" />
+
+<app-navbar></app-navbar>
+<div class="container" id="main-container">
+
+   <div class="ml-5 mb-4" >
+      <table  class="table borderless" >
+         <tr>
+            <td>
+               <label  for="exampleInputEmail1">Author ID</label>
+               <input style="width: 60%;" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                  placeholder="Filter by Genre Id">
+            </td>
+            <td>
+               <label for="exampleInputEmail1">First name</label>
+               <input  style="width: 60%;" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                  placeholder="Filter by Genre Name">
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <label for="exampleInputEmail1">Middle name</label>
+               <input  style="width: 60%;" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                  placeholder="Filter by Genre Id">
+            </td>
+            <td>
+               <label for="exampleInputEmail1">Last name</label>
+               <input style="width: 60%;" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                  placeholder="Filter by Genre Name">
+            </td>
+         </tr>
+      </table>
+   </div>
+
+
+   <div class="row align-items-center ">
+      <div class="col-md-6">
+         <div class="mb-3">
+            <h5 class="card-title">Genre List </h5>
+         </div>
+      </div>
+      <div class="col-md-6 ">
+         <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3">
+            <div>
+               <ul class="nav nav-pills">
+                  <li class="nav-item">
+                     <a aria-current="page" href="#" class="router-link-active router-link-exact-active nav-link active"
+                        data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="List"
+                        aria-label="List">
+                        <i class="bx bx-list-ul"></i>
+                     </a>
+                  </li>
+                  <li class="nav-item">
+                     <a href="#" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="top" title=""
+                        data-bs-original-title="Grid" aria-label="Grid"><i class="bx bx-grid-alt"></i></a>
+                  </li>
+               </ul>
+            </div>
+            <div>
+               <a (click)="onOpenModal(null, 'add')" data-bs-toggle="modal" data-bs-target=".add-new"
+                  class="btn btn-primary"><i class="bx bx-plus me-1"></i> Add New</a>
+            </div>
+            <div class="dropdown">
+               <a class="btn btn-link text-muted py-1 font-size-16 shadow-none dropdown-toggle" href="#" role="button"
+                  data-bs-toggle="dropdown" aria-expanded="false"><i class="bx bx-dots-horizontal-rounded"></i></a>
+               <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="#">Action</a></li>
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+               </ul>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="row">
+      <div class="col-lg-12">
+         <div class="">
+            <div class="table-responsive">
+               <table class="table project-list-table table-nowrap align-middle table-borderless ">
+                  <thead>
+                     <tr>
+                        <th scope="col">Author Id</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Middle Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col" style="width: 200px;">Action</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr *ngFor="let author of authors">
+                        <td>{{author.authorId}}</td>
+                        <td><a>{{author.name.firstName}}</a></td>
+                        <td>{{author.name.middleName}}</td>
+                        <td>{{author.name.lastName}}</td>
+
+                        <td>
+                           <ul class="list-inline mb-0">
+                              <li class="list-inline-item">
+                                 <a (click)="onOpenModal(author, 'edit')" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" title="Edit" class="px-2 text-primary"><i
+                                       class="bx bx-pencil font-size-18"></i></a>
+                              </li>
+                              <li class="list-inline-item">
+                                 <a (click)="onOpenModal(author, 'delete')" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" title="Delete" class="px-2 text-danger"><i
+                                       class="bx bx-trash-alt font-size-18"></i></a>
+                              </li>
+                              <li class="list-inline-item dropdown">
+                                 <a class="text-muted dropdown-toggle font-size-18 px-2" href="#" role="button"
+                                    data-bs-toggle="dropdown" aria-haspopup="true"><i
+                                       class="bx bx-dots-vertical-rounded"></i></a>
+                                 <div class="dropdown-menu dropdown-menu-end">
+                                    <a class="dropdown-item" href="#">Action</a><a class="dropdown-item"
+                                       href="#">Another action</a><a class="dropdown-item" href="#">Something else
+                                       here</a>
+                                 </div>
+                              </li>
+                           </ul>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+
+
+
+
+
+
+
+   <!-- add module-->
+   <div class="modal fade in" id="addAuthorModal" tabindex="-1" role="dialog" aria-labelledby="addAuthorModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="addAuthorModalLabel">Add Author</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+
+               <form [formGroup]="addAuthorForm" (ngSubmit)="addAuthor()">
+
+                  <div class="form-group">
+                     <label for="name">authorId</label>
+                     <input type="text" name="authorId" class="form-control" id="authorId" placeholder="authorId"
+                        formControlName="authorId" required>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="email">First Name</label>
+                     <input type="email" name="firstName" class="form-control" id="firstName" placeholder="firstName"
+                        formControlName="firstName" required>
+                  </div>
+                  <div class="form-group">
+                     <label for="email">Middle Name</label>
+                     <input type="email" name="middleName" class="form-control" id="middleName" placeholder="middleName"
+                        formControlName="middleName" required>
+                  </div>
+                  <div class="form-group">
+                     <label for="email">Last Name</label>
+                     <input type="email" name="lastName" class="form-control" id="lastName" placeholder="lastName"
+                        formControlName="lastName" required>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="phone">Image URL</label>
+                     <input type="text" name="imgUrl" class="form-control">
+                  </div>
+
+                  <div class="modal-footer">
+                     <button type="button" id="add-author-form" class="btn btn-secondary"
+                        data-dismiss="modal">Close</button>
+                     <button [disabled]="addAuthorForm.invalid" type="submit" class="btn btn-primary">Save
+                        changes</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- edit modal -->
+   <div class="modal fade in" id="UpdateAuthorModal" tabindex="-1" role="dialog" aria-labelledby="authorEditModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="UpdateAuthorModalLabel">Edit Author {{editAuthor?.name.firstName}}</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <form [formGroup]="editAuthorForm" (ngSubmit)="updateAuthor()">
+
+                  <div class="form-group">
+                     <label for="name">First Name</label>
+                     <input type="text" name="firstName" class="form-control" id="firstName"
+                        aria-describedby="emailHelp" placeholder="firstName" formControlName="firstName"
+                        ngModel="{{editAuthor?.name.firstName}}">
+                  </div>
+                  <div class="form-group">
+                     <label for="name">Middle Name</label>
+                     <input type="text" name="middleName" class="form-control" id="middleName"
+                        aria-describedby="emailHelp" placeholder="middleName" formControlName="middleName"
+                        ngModel="{{editAuthor?.name.middleName}}">
+                  </div>
+                  <div class="form-group">
+                     <label for="name">Last Name</label>
+                     <input type="text" name="lastName" class="form-control" id="lastName" aria-describedby="emailHelp"
+                        placeholder="lastName" formControlName="lastName" ngModel="{{editAuthor?.name.lastName}}">
+                  </div>
+
+
+                  <input type="hidden" name="authorId" class="form-control" id="id" placeholder="authorId"
+                     formControlName="authorId" ngModel="{{editAuthor?.authorId}}">
+
+                  <div class="form-group">
+                     <label for="phone">Image URL</label>
+                     <input type="text" name="imgUrl" class="form-control" id="imgUrl" placeholder="Image URL">
+                  </div>
+
+
+                  <div class="modal-footer">
+                     <button type="button" id="close-edit" data-dismiss="modal" class="btn btn-secondary">Close</button>
+                     <button [disabled]="editAuthorForm.invalid" type="submit" class="btn btn-primary">Save
+                        changes</button>
+                  </div>
+
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- Delete Modal -->
+   <div class="modal fade in" id="deleteAuthorModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="deleteModelLabel">Delete Author</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <p>Are you sure you want to delete author {{deleteAuthor?.name.firstName}}</p>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                  <button (click)="onDeleteAuthor(deleteAuthor?.authorId)" class="btn btn-danger"
+                     data-dismiss="modal">Yes</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+</div>

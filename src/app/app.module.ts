@@ -10,6 +10,9 @@ import { ClientComponent } from './client/client.component';
 import { ClientBookComponent } from './client-book/client-book.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomePageComponent } from './home-page/home-page.component';
+import { AuthorComponent } from './author/author.component';
+import { GenreComponent } from './genre/genre.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +20,11 @@ import { HomePageComponent } from './home-page/home-page.component';
     ClientComponent,
     BookComponent,
     ClientBookComponent,
-    HomePageComponent
+    HomePageComponent,
+    ClientBookComponent,
+    AuthorComponent,
+    GenreComponent,
+    NavbarComponent
     
   ],
   imports: [

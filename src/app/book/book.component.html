@@ -1,6 +1,4 @@
-<!-- Selected value: {{SelectedValue}} -->
-
-
+<!-- <p>{{SelectedValueAuthor.authorId}}</p> -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
    <a class="navbar-brand" style="color:white;">Book Manager</a>
@@ -11,13 +9,30 @@
    <div class="collapse navbar-collapse" id="navbarColor02">
       <ul class="navbar-nav mr-auto">
          <li class="nav-item active">
-            <a class="nav-link" (click)="onOpenModal(null, 'add')">Add Book <span class="sr-only">(current)</span></a>
+            <a class="nav-link" (click)="onOpenModal(null, 'add')"> Book <span class="sr-only">(current)</span></a>
+         </li>
+         <li class="nav-item active">
+            <a class="nav-link" routerLink="/genre">Genre <span class="sr-only">(current)</span></a>
+         </li>
+         <li class="nav-item active">
+            <a class="nav-link" routerLink="/author">Author <span class="sr-only">(current)</span></a>
          </li>
       </ul>
    </div>
 </nav>
-
+<app-navbar></app-navbar>
+<div class='d-flex justify-content-around'>
+   <p></p>
+   <p></p>
+   <button (click)="ToggleAssignClient()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-filter "
+         viewBox="0 0 16 16">
+         <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+      </svg>
+   </button>
+</div>
 <div class="container" id="main-container">
+
    <div class="row d-flex justify-content-center">
       <div *ngFor="let book of books" class="col-md-3">
          <div class="ibox">
@@ -35,46 +50,47 @@
                   <div class="small m-t-xs">
                      {{book.description}}
                   </div>
-                  <p></p>
-                  <form #assignClientForm="ngForm" (ngSubmit)="AssignClientToBook(assignClientForm)">
-                     <div class="mt-10 ">
-                        <div class="col-sm-15">
-                           <select name="Client" (change)="ChangeBook($event)" class="form-control">
-                              <option value="">Search Client</option>
-                              <option [value]="client.clientId" *ngFor="let client of ClientList">
-                                 {{client.clientId}} | {{client.name.firstName}} {{client.name.lastName}}
-                              </option>
+                  <div *ngIf="AssignClientsHtml">
+                     <p></p>
+                     <form [formGroup]="form" (ngSubmit)="AssigningClientToBook()">
+                        <div class="mt-10 ">
+                           <div class="col-sm-15">
+                              <!--book mark-->
+                              <select name="Client" (change)="ChangeBook($event)" class="form-control">
+                                 <option value="">Search Client</option>
+                                 <option [value]="client.clientId" *ngFor="let client of ClientList">
+                                    {{client.clientId}} | {{client.name.firstName}} {{client.name.lastName}}
+                                 </option>
+                              </select>
+                           </div>
+                           <input type="hidden" ngModel="{{SelectedValue}}" name="clientId" class="form-control"
+                              id="clientId" placeholder="clientId" value="" formControlName="clientId">
+                           <input type="hidden" ngModel="{{book.bookId}}" name="bookId" class="form-control" id="bookId"
+                              placeholder="{{book.bookId}}" value="{{book.bookId}}" formControlName="bookId">
+                        </div>
+                        <div class="d-flex justify-content-center">
+                           <div class="modal-footer">
+                              <button type="submit" class="btn btn-primary">Assign
+                                 Client</button>
 
-                              <!-- <p  >{{SelectedValue}}</p>
-                              <p ngModel >{{book.bookId}}</p> -->
-                           </select>
+                           </div>
                         </div>
-                        <input type="hidden" ngModel="{{SelectedValue}}" name="clientId" class="form-control"
-                           id="clientId" placeholder="clientId" value="">
-                        <input type="hidden" ngModel="{{book.bookId}}" name="bookId" class="form-control" id="bookId"
-                           placeholder="{{book.bookId}}" value="{{book.bookId}}">
-                        <!-- <p ngModel name="clientId">{{SelectedValue}}</p> -->
-                        <!-- <p ngModel name="bookId">{{book.bookId}}</p>  -->
-                     </div>
-                     <div class="d-flex justify-content-center">
-                        <div class="modal-footer">
-                           <button type="submit" class="btn btn-primary">Assign
-                              Client</button>
-                              
-                        </div>
-                     </div>
-                     <div class="d-flex justify-content-center">
-                     <a (click)="onOpenModal(book, 'edit')" class="btn btn-primary tooltips" data-placement="top"
-                     data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
-                     <a (click)="onOpenModal(book, 'delete')" class="btn btn-secondary tooltips" data-placement="top"
-                     data-original-title="Delete"><i class="fa fa-times"></i></a>
+                     </form>
                   </div>
-                  </form>
+                  <p></p>
+                  <div class="d-flex justify-content-center">
+                     <a (click)="onOpenModal(book, 'edit')" class="btn btn-primary tooltips" data-placement="top"
+                        data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
+                     <a (click)="onOpenModal(book, 'delete')" class="btn btn-secondary tooltips" data-placement="top"
+                        data-original-title="Delete"><i class="fa fa-times"></i></a>
+                  </div>
+
                </div>
             </div>
          </div>
       </div>
    </div>
+
    <!-- add module-->
    <div class="modal fade" id="addBookModal" tabindex="-1" role="dialog" aria-labelledby="addBookModalLabel"
       aria-hidden="true">
@@ -87,46 +103,118 @@
                </button>
             </div>
             <div class="modal-body">
-               <form #addForm="ngForm" (ngSubmit)="onAddBook(addForm)">
+
+               <form [formGroup]="addBookForm" (ngSubmit)="addBook()">
+
                   <div class="form-group">
                      <label for="name">bookId</label>
-                     <input type="text" ngModel name="bookId" class="form-control" id="bookId" placeholder="bookId"
-                        required>
+                     <input type="text" name="bookId" class="form-control" id="bookId" placeholder="bookId"
+                        formControlName="bookId" required>
                   </div>
+
                   <div class="form-group">
                      <label for="email">Book Name</label>
-                     <input type="email" ngModel name="bookName" class="form-control" id="bookName"
-                        placeholder="bookName" required>
+                     <input type="email" name="bookName" class="form-control" id="bookName" placeholder="bookName"
+                        formControlName="bookName" required>
                   </div>
-                  <div class="form-group">
+
+
+                  <!-- <div class="form-group">
                      <label for="phone">Book Genre</label>
-                     <input type="text" ngModel name="genre" class="form-control" id="genre" placeholder="genre"
-                        required>
+                     <input type="text" name="genre" class="form-control" id="genre" placeholder="genre"
+                        formControlName="genre" required>
+                  </div> -->
+                  <p>Genre</p>
+                  <select name="Genre" (change)="ChangeGenre($event)" class="form-control" formControlName="genre">
+                     <option [ngValue]="genre.genreName" *ngFor="let genre of GenreList">
+                        {{genre.genreName}}
+                     </option>
+                  </select>
+
+                  <p>Genre 2</p>
+                  <select name="Genre2" (change)="ChangeGenre($event)" class="form-control" formControlName="genre2">
+                     <option [ngValue]="genre.genreName" *ngFor="let genre of GenreList">
+                        {{genre.genreName}}
+                     </option>
+                  </select>
+
+                  <p>Genre 3</p>
+                  <select name="Genre3" (change)="ChangeGenre($event)" class="form-control" formControlName="genre3">
+                     <option [ngValue]="genre.genreName" *ngFor="let genre of GenreList">
+                        {{genre.genreName}}
+                     </option>
+                  </select>
+                  <!--book mark-->
+
+                  <p>Author</p>
+                  <select name="Author" (change)="ChangeAuthor($event)" class="form-control" formControlName="author">
+                     <option [ngValue]="author.authorId" *ngFor="let author of AuthorList">
+                        {{author.authorId}} | {{author.name.firstName}} {{author.name.lastName}}
+                     </option>
+                  </select>
+                  <!-- <p>{{SelectedValueAuthor}} sadsad</p> -->
+                  <!-- <input  ngModel="{{SelectedValueAuthor}}" name="author" class="form-control" id="author"
+                  placeholder="author"> -->
+
+
+
+                  <p></p>
+                  <p>Author 2</p>
+                  <select name="author2" (change)="ChangeAuthor($event)" class="form-control" formControlName="author2">
+                     <option [ngValue]="author.authorId" *ngFor="let author of AuthorList">
+                        {{author.authorId}} | {{author.name.firstName}} {{author.name.lastName}}
+                     </option>
+
+                  </select>
+
+                  <p></p>
+                  <p>Author 3</p>
+                  <select name="author3" (change)="ChangeAuthor($event)" class="form-control" formControlName="author3">
+                     <option [ngValue]="author.authorId" *ngFor="let author of AuthorList">
+                        {{author.authorId}} | {{author.name.firstName}} {{author.name.lastName}}
+                     </option>
+
+                  </select>
+
+                  <!-- <div class="form-group">
+                     <label for="phone">Author</label>
+                     <input type="text" name="author" class="form-control" id="author" placeholder="author"
+                     formControlName="author" required>
                   </div>
+
                   <div class="form-group">
-                     <label for="phone">Book Author</label>
-                     <input type="text" ngModel name="author" class="form-control" id="author" placeholder="author"
-                        required>
+                     <label for="phone">Author(2)</label>
+                     <input formControlName="author2" type="text" name="author2" class="form-control" id="author2" placeholder="author 2">
                   </div>
+
+                  <div class="form-group">
+                     <label for="phone">Author(3)</label>
+                     <input formControlName="author3" type="text" name="author3" class="form-control" id="author3" placeholder="author 3">
+                  </div>
+                  <p></p> -->
                   <div class="form-group">
                      <label for="phone">Book Description</label>
-                     <input type="text" ngModel name="description" class="form-control" id="description"
-                        placeholder="description" required>
+                     <input type="text" name="description" class="form-control" id="description"
+                        placeholder="description" formControlName="description" required>
                   </div>
+
                   <div class="form-group">
                      <label for="phone">Is borrowed</label>
-                     <input type="text" ngModel name="isRented" class="form-control" id="isRented"
-                        placeholder="is Book borrowed" required>
+                     <input type="text" name="isRented" class="form-control" id="isRented"
+                        placeholder="is Book borrowed" formControlName="isRented" required>
                   </div>
+
                   <div class="form-group">
                      <label for="phone">Image URL</label>
-                     <input type="text" ngModel name="imgUrl" class="form-control" id="imgUrl" placeholder="Image URL"
-                        required>
+                     <input type="text" name="imgUrl" class="form-control" formControlName="imgUrl" id="imgUrl"
+                        placeholder="Image URL" required>
                   </div>
+
                   <div class="modal-footer">
                      <button type="button" id="add-book-form" class="btn btn-secondary"
                         data-dismiss="modal">Close</button>
-                     <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Save changes</button>
+                     <button [disabled]="addBookForm.invalid" type="submit" class="btn btn-primary">Save
+                        changes</button>
                   </div>
                </form>
             </div>
@@ -146,52 +234,134 @@
                </button>
             </div>
             <div class="modal-body">
-               <form #editForm="ngForm">
+               <form [formGroup]="editBookForm" (ngSubmit)="updateBook()">
 
                   <div class="form-group">
                      <label for="name">Name</label>
-                     <input type="text" ngModel="{{editBook?.bookName}}" name="name" class="form-control" id="name"
-                        aria-describedby="emailHelp" placeholder="Name">
+                     <input type="text" name="bookName" class="form-control" id="bookName" aria-describedby="emailHelp"
+                        placeholder="Name" formControlName="bookName" ngModel="{{editBook?.bookName}}">
                   </div>
 
-                  <input type="hidden" ngModel="{{editBook?.bookId}}" name="id" class="form-control" id="id"
-                     placeholder="Email">
+                  <input type="hidden" name="bookId" class="form-control" id="id" placeholder="bookId"
+                     formControlName="bookId" ngModel="{{editBook?.bookId}}">
 
-                  <div class="form-group">
-                     <label for="phone">Genre</label>
-                     <input type="text" ngModel="{{editBook?.genre}}" name="jobTitle" class="form-control" id="jobTitle"
-                        placeholder="Job title">
-                  </div>
 
-                  <div class="form-group">
+<!--                      
+                  <p>Author</p>
+                  <select name="Author" (change)="ChangeAuthor($event)" class="form-control" formControlName="author">
                      <label for="phone">Author</label>
-                     <input type="text" ngModel="{{editBook?.author}}" name="phone" class="form-control" id="phone"
-                        name="phone" placeholder="Phone">
+                     <option>{{editBook?.author}}</option>
+                     
+                     <option [ngValue]="author.authorId" *ngFor="let author of AuthorList">
+                        {{author.authorId}} | {{author.name.firstName}} {{author.name.lastName}}
+                     </option>
+                  </select> -->
+
+                  <p>Genre</p>
+                  <select name="Genre" (change)="ChangeGenre($event)" class="form-control" formControlName="genre">
+                     <label for="phone">Genre</label>
+                     <option>{{editBook?.genre}}</option>
+                     <!-- [ngValue]="editBook?.author.id" -->
+                     <option [ngValue]="genre.genreName" *ngFor="let genre of GenreList">
+                        {{genre.genreName}}
+                     </option>
+                  </select>
+
+                  <p>Genre 2</p>
+                  <select name="Genre" (change)="ChangeGenre($event)" class="form-control" formControlName="genre2">
+                     <label for="phone">Genre</label>
+                     <option>{{editBook?.genre2}}</option>
+                     <!-- [ngValue]="editBook?.author.id" -->
+                     <option [ngValue]="genre.genreName" *ngFor="let genre of GenreList">
+                        {{genre.genreName}}
+                     </option>
+                  </select>
+
+                  <p>Genre 3</p>
+                  <select name="Genre" (change)="ChangeGenre($event)" class="form-control" formControlName="genre3">
+                     <label for="phone">Genre</label>
+                     <option>{{editBook?.genre3}}</option>
+                     <!-- [ngValue]="editBook?.author.id" -->
+                     <option [ngValue]="genre.genreName" *ngFor="let genre of GenreList">
+                        {{genre.genreName}}
+                     </option>
+                  </select>
+
+                  <!-- <div class="form-group">
+                     <label for="phone">Genre</label>
+                     <input type="text" name="genre" class="form-control" id="jobTitle" placeholder="Genre"
+                        formControlName="genre" ngModel="{{editBook?.genre}}">
+                  </div> -->
+
+                  <!--book mark-->
+                  <!-- <div class="form-group">
+                     <label for="phone">Author</label>
+                     <input type="text" ngModel="{{editBook?.author}}" name="author" class="form-control" id="author"
+                        placeholder="Phone">
                   </div>
+
+                  <div class="form-group">
+                     <label for="phone">Author(2)</label>
+                     <input type="text" ngModel="{{editBook?.author2}}" name="author2" class="form-control" id="author2"
+                        placeholder="author 2">
+                  </div>
+
+                  <div class="form-group">
+                     <label for="phone">Author(3)</label>
+                     <input type="text" ngModel="{{editBook?.author3}}" name="author3" class="form-control" id="author3"
+                        placeholder="author 3">
+                  </div> -->
+
+                  <p>Author</p>
+                  <select name="Author" (change)="ChangeAuthor($event)" class="form-control" formControlName="author">
+                     <label for="phone">Author</label>
+                     <option>{{editBook?.author}}</option>
+                     <!-- [ngValue]="editBook?.author.id" -->
+                     <option [ngValue]="author.authorId" *ngFor="let author of AuthorList">
+                        {{author.authorId}} | {{author.name.firstName}} {{author.name.lastName}}
+                     </option>
+                  </select>
+
+                  <p></p>
+                  <p>Author 2</p>
+                  <select name="author2" (change)="ChangeAuthor($event)" class="form-control" formControlName="author2">
+                     <option [ngValue]="author.authorId" *ngFor="let author of AuthorList">
+                        {{author.authorId}} | {{author.name.firstName}} {{author.name.lastName}}
+                     </option>
+                  </select>
+                  <p></p>
+
+                  <p>Author 3</p>
+                  <select name="author3" (change)="ChangeAuthor($event)" class="form-control" formControlName="author3">
+                     <option [ngValue]="author.authorId" *ngFor="let author of AuthorList">
+                        {{author.authorId}} | {{author.name.firstName}} {{author.name.lastName}}
+                     </option>
+                  </select>
+
 
                   <div class="form-group">
                      <label for="phone">Description</label>
-                     <input type="text" ngModel="{{editBook?.description}}" name="description" class="form-control"
-                        id="description" name="description" placeholder="description">
+                     <input type="text" name="description" class="form-control" id="description"
+                        placeholder="description" formControlName="description" ngModel="{{editBook?.description}}">
                   </div>
 
 
                   <div class="form-group">
                      <label for="phone">Is Rented</label>
-                     <input type="text" ngModel="{{editBook?.isRented}}" name="isRented" class="form-control"
-                        id="isRented" placeholder="Borrwed status">
+                     <input type="text" name="isRented" class="form-control" id="isRented" placeholder="Borrowed status"
+                        formControlName="isRented" ngModel="{{editBook?.isRented}}">
                   </div>
 
                   <div class="form-group">
                      <label for="phone">Image URL</label>
-                     <input type="text" ngModel="{{editBook?.imgUrl}}" name="imageUrl" class="form-control"
-                        id="imageUrl" placeholder="Image URL">
+                     <input type="text" name="imgUrl" class="form-control" id="imgUrl" placeholder="Image URL"
+                        formControlName="imgUrl" ngModel="{{editBook?.imgUrl}}">
                   </div>
 
 
                   <div class="modal-footer">
-                     <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Close</button>
-                     <button (click)="onUpdateBook(editForm.value)" data-dismiss="modal" class="btn btn-primary">Save
+                     <button type="button" id="close-edit" data-dismiss="modal" class="btn btn-secondary">Close</button>
+                     <button [disabled]="editBookForm.invalid" type="submit" class="btn btn-primary">Save
                         changes</button>
                   </div>
 
@@ -201,8 +371,8 @@
       </div>
    </div>
 
-      <!-- Delete Modal -->
-      <div class="modal fade" id="deleteBookModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel"
+   <!-- Delete Modal -->
+   <div class="modal fade" id="deleteBookModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel"
       aria-hidden="true">
       <div class="modal-dialog" role="document">
          <div class="modal-content">

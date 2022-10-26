@@ -11,6 +11,9 @@
   padding: 8px;
 }
 
-.table tr:nth-child(even) {
-  background-color: #dddddd;
+.editBtn{
+  color: green;
+}
+.deleteBtn{
+  color: red;
 }
