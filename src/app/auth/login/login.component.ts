@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   role: string = '';
 
   user: User = new User();
+  userAdmin: User = new User();
   roles: string[];
 
   constructor(private authService: AuthService, private route: Router) {
@@ -27,6 +28,34 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.username = '';
     this.password = '';
+  }
+
+  newFunction(){
+    this.userAdmin.username = 'admin';
+    this.userAdmin.password= '123456';
+    this.userAdmin.role = 'admin';
+
+    this.authService.login(this.user).subscribe(res => {
+      if (res == null) {
+        alert("username or password is wrong");
+        this.ngOnInit();
+      } else {
+        console.log("Login successful");
+        localStorage.setItem("token", res.token);
+
+        if (this.role == 'user') {
+          this.route.navigate(['/home']);
+        }
+
+        if (this.role == 'admin') {
+          this.route.navigate(['/admin']);
+        }
+      }
+    }, err => {
+
+      alert("Login failed")
+      this.ngOnInit();
+    })
   }
 
   login() {
@@ -43,7 +72,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem("token", res.token);
 
         if (this.role == 'user') {
-          this.route.navigate(['/user']);
+          this.route.navigate(['/home']);
         }
 
         if (this.role == 'admin') {

@@ -110,8 +110,20 @@ public onDeleteGenre(genreId: string): void {
   );
 }
 
-public searchGenres(key: string): void {
-  console.log(key);
+public searchGenreId(key: string): void {
+  const results: Genre[] = [];
+  for (const genre of this.genres) {
+    if (genre.genreId.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+      results.push(genre);
+    }
+  }
+  this.genres = results;
+  if (!key) {
+    this.getGenres();
+  }
+}
+
+public searchGenreName(key: string): void {
   const results: Genre[] = [];
   for (const genre of this.genres) {
     if (genre.genreName.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
@@ -119,10 +131,11 @@ public searchGenres(key: string): void {
     }
   }
   this.genres = results;
-  if (results.length === 0 || !key) {
+  if (!key) {
     this.getGenres();
   }
 }
+
 
 public onOpenModal(genre: Genre, mode: string): void {
   console.log("in open module");

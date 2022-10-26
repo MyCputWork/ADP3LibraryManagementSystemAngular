@@ -23,10 +23,14 @@ public addClientBook(clientBook : ClientBook): Observable<ClientBook> {
 }
 
 public UpdateClient(clientBook : ClientBook): Observable<ClientBook> {
-    return this.http.put<ClientBook>(`${this.apiServerUrl}/librarymanagementsystem/books/update_book` , clientBook)
+    return this.http.put<ClientBook>(`${this.apiServerUrl}/librarymanagementsystem/clientBook/update_book` , clientBook)
 }
 
 public deleteClient(clientBookId : string): Observable<void> {
-    return this.http.delete<void>(`${this.apiServerUrl}/librarymanagementsystem/books/deleteBook/${clientBookId}`)
+    return this.http.delete<void>(`${this.apiServerUrl}/librarymanagementsystem/clientBook/delete_clientbook/${clientBookId}`)
+}
+
+public getClientsBooksByBookId(bookId: string): Observable<ClientBook> {
+    return this.http.get<ClientBook>(`${this.apiServerUrl}/librarymanagementsystem/clientBook/findClientBookByBook/${bookId}`)
 }
 }

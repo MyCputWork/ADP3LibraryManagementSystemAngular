@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { IfStmt } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Author } from './author';
 import { AuthorService } from './author.service';
 
@@ -14,6 +15,8 @@ export class AuthorComponent implements OnInit {
   public authors: Author[];
   public editAuthor: Author;
   public deleteAuthor: Author;
+  submitted = false;
+  public errorMsg: string;
 
   author: Author = {
     authorId: '',
@@ -28,13 +31,15 @@ export class AuthorComponent implements OnInit {
   editAuthorForm: FormGroup;
   authorList: any;
 
+  private authorIdFC: FormControl;
+
   constructor(private authorService: AuthorService, public fb: FormBuilder, public addAuthorFb: FormBuilder,
     public editAuthorFb: FormBuilder) {
       this.addAuthorForm = this.addAuthorFb.group({
-        authorId: [''],
-        firstName: [''],
+        authorId: ['', Validators.required, Validators.pattern('^[0-9]*$')],
+        firstName: ['', Validators.pattern('[a-zA-Z]+$')],
         middleName: [''],
-        lastName: ['']
+        lastName: ['', Validators.pattern('[a-zA-Z]+$')]
       })
       this.editAuthorForm = this.editAuthorFb.group({
         authorId: [''],
@@ -43,6 +48,26 @@ export class AuthorComponent implements OnInit {
         lastName: ['']
       })
      }
+
+
+     get authorId(){
+      var authorIdv = this.addAuthorForm.get('authorId').value;
+      return this.addAuthorForm.get('authorId');
+     }
+
+     get firstName(){
+      return this.addAuthorForm.get('firstName');
+     }
+
+     get middleName(){
+      return this.addAuthorForm.get('middleName');
+     }
+
+     get lastName(){
+      return this.addAuthorForm.get('lastName');
+     }
+
+
 
   ngOnInit(): void {
     this.getAuthors();
@@ -86,12 +111,14 @@ export class AuthorComponent implements OnInit {
       (error: HttpErrorResponse) => {
         alert(error.message);
         this.getAuthors();
-      }
+      }  
     );
+    this.getAuthors();
+    
   }
 
   public updateAuthor(){
-    document.getElementById('update-author-form').click();
+    document.getElementById('close-edit').click();
     var formData: any = new FormData();
     formData.append('authorId', this.editAuthorForm.get('authorId').value);
     formData.append('firstName', this.editAuthorForm.get('firstName').value);
@@ -100,7 +127,7 @@ export class AuthorComponent implements OnInit {
 
     console.log(formData.get("authorId"));
 
-    this.author.authorId= formData.get("clientId");
+    this.author.authorId= formData.get("authorId");
     this.author.name.firstName= formData.get("firstName");
     this.author.name.middleName= formData.get("middleName");
     this.author.name.lastName= formData.get("lastName");
@@ -143,6 +170,59 @@ export class AuthorComponent implements OnInit {
     }
     this.authors = results;
     if (results.length === 0 || !key) {
+      this.getAuthors();
+    }
+  }
+
+  public searchAuthorsId(key: string): void {
+    console.log(key);
+    const results: Author[] = [];
+    for (const author of this.authors) {
+      if (author.authorId.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+        results.push(author);
+      }
+    }
+    this.authors = results;
+    if (!key) {
+      this.getAuthors();
+    }
+  }
+
+  public searchAuthorName(key: string): void {
+    const results: Author[] = [];
+    for (const author of this.authors) {
+      if (author.name.firstName.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+        results.push(author);
+      }
+    }
+    this.authors = results;
+    if (!key) {
+      this.getAuthors();
+    }
+  }
+
+  public searchAuthorMiddleName(key: string): void {
+    const results: Author[] = [];
+    for (const author of this.authors) {
+      if (author.name.middleName.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+        results.push(author);
+      }
+    }
+    this.authors = results;
+    if (!key) {
+      this.getAuthors();
+    }
+  }
+
+  public searchAuthorLastName(key: string): void {
+    const results: Author[] = [];
+    for (const author of this.authors) {
+      if (author.name.lastName.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+        results.push(author);
+      }
+    }
+    this.authors = results;
+    if (!key) {
       this.getAuthors();
     }
   }

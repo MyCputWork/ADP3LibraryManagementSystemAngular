@@ -19,6 +19,7 @@ export class ClientBookComponent implements OnInit {
   // public clientBook: ClientBook[];
 
   clientBook: ClientBook = {
+    clientBookId: '',
     clients: {
       clientId: ''
     },

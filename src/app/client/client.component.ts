@@ -337,11 +337,60 @@ export class ClientComponent implements OnInit{
     }
 
     this.clients = output;
-    if(output.length === 0 || !key){
+    if(!key){
       this.getAllClients();
 
     }
   }
+
+  public searchClientByFirstName(key: string): void{
+    const output: Client[] = [];
+
+    for(const client of this.clients){
+      if(client.name.firstName.indexOf(key) !== -1){
+        output.push(client);
+      }
+    }
+
+    this.clients = output;
+    if( !key){
+      this.getAllClients();
+
+    }
+  }
+
+  public searchClientByMiddleName(key: string): void{
+    const output: Client[] = [];
+
+    for(const client of this.clients){
+      if(client.name.middleName.indexOf(key) !== -1){
+        output.push(client);
+      }
+    }
+
+    this.clients = output;
+    if( !key){
+      this.getAllClients();
+
+    }
+  }
+
+  public searchClientByLastName(key: string): void{
+    const output: Client[] = [];
+
+    for(const client of this.clients){
+      if(client.name.lastName.indexOf(key) !== -1){
+        output.push(client);
+      }
+    }
+
+    this.clients = output;
+    if(!key){
+      this.getAllClients();
+
+    }
+  }
+
 
   public onOpenModal(client: Client, clientAddress: ClientAddress, clientContact: ClientContact,contact: Contact,mode: string): void{
       console.log("whatever");

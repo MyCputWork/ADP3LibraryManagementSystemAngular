@@ -50,6 +50,6 @@ LoginComponent,
     RouterModule
   ],
   providers: [],
-  bootstrap: [ClientComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

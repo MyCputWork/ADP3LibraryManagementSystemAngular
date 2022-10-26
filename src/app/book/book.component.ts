@@ -1,4 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { identifierName } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { Author } from '../author/author';
@@ -54,7 +55,10 @@ BookList: any;
   form: FormGroup;
   dateBorrowed = new Date();
 
+  clientBookDel: ClientBook;
+
   clientBook: ClientBook = {
+    clientBookId: '',
     dateOrdered: '',
     clients: {
       clientId: ''
@@ -162,7 +166,6 @@ BookList: any;
   }
 
 
-
   
   public getBooks(availability: string): void {
     
@@ -178,20 +181,44 @@ BookList: any;
     );
   }
 
-  //add methods
 
+  //delete methods
+  public onDeleteBook(book: Book): void {
+// if(book.isRented === "Not Available"){
+//       this.clientBookService.getClientsBooksByBookId(book.bookId).subscribe(
+//         (response: ClientBook) => {
+//           this.clientBookDel = response;
+//           console.log(this.clientBook);
+          
+//         },
+//         (error: HttpErrorResponse) => {
+//           alert(error.message);
+//         }
+//       );
 
-  // public AssignClientToBook(assignClientForm: NgForm): void{
-  //   this.clientBookService.addClientBook(assignClientForm.value).subscribe(
-  //     (response: ClientBook) => {
-  //       console.log(response);
-  //       this.getBooks();
-  //     },
-  //     (error: HttpErrorResponse) => {
-  //       alert(error.message);
-  //     }
-  //   );
-  // }
+//       this.clientBookService.deleteClient(this.clientBook.clientBookId).subscribe(
+//         (response: void) => {
+//           console.log(response);
+//           this.getBooks('Not Available');
+//         },
+//         (error: HttpErrorResponse) => {
+//           alert(error.message);
+//           this.getBooks('Not Available');
+//         }
+//       );
+//     }else{
+      this.bookService.deleteBook(book.bookId).subscribe(
+        (response: void) => {
+          console.log(response);
+          this.getBooks('Available');
+        },
+        (error: HttpErrorResponse) => {
+          alert(error.message);
+        }
+      );
+    }
+  //}
+
 
   public AssigningClientToBook(){
     var formData: any = new FormData();
@@ -204,7 +231,7 @@ BookList: any;
     this.clientBook.books.bookId = formData.get("bookId");
     this.clientBook.dateOrdered = this.dateBorrowed.toUTCString();
 
-    this.clientBookService.addClientBook(this.clientBook).subscribe(
+    this.clientBookService.addClientBook(this.clientBook).subscribe( //asidioasjdijadsij oija sjdoi ajsdi
       (response: ClientBook) => {
         console.log(response);
       },
@@ -216,13 +243,15 @@ BookList: any;
     this.bookService.updateBookAvailability(this.clientBook.books.bookId).subscribe(
       (response: void) => {
         console.log(response);
+        this.getBooks('Available');
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
+        this.getBooks('Available');
       }
     );
 
-    this.getBooks('Available')
+    this.getBooks('Available');
   }
   
   public onAddBook(addForm: NgForm): void {
@@ -270,6 +299,9 @@ BookList: any;
     this.book.isRented = formData.get("isRented");
     this.book.imgUrl = formData.get("imgUrl");
 
+    if(this.book.imgUrl === ""){
+      this.book.imgUrl= "https://www.adazing.com/wp-content/uploads/2019/02/open-book-clipart-03.png";
+    }
     this.bookService.addBook(this.book).subscribe(
       (response: Book) => {
         console.log(response);
@@ -313,6 +345,10 @@ BookList: any;
     this.book.isRented = formData.get("isRented");
     this.book.imgUrl = formData.get("imgUrl");
 
+    if(this.book.imgUrl === ""){
+      this.book.imgUrl= "https://www.adazing.com/wp-content/uploads/2019/02/open-book-clipart-03.png";
+    }
+
     this.bookService.UpdateBook(this.book).subscribe(
       (response: Book) => {
         console.log(response);
@@ -339,18 +375,6 @@ BookList: any;
     );
   }
 
-  //delete methods
-  public onDeleteBook(bookId: string): void {
-    this.bookService.deleteBook(bookId).subscribe(
-      (response: void) => {
-        console.log(response);
-        this.getBooks('Available');
-      },
-      (error: HttpErrorResponse) => {
-        alert(error.message);
-      }
-    );
-  }
 
 
   //misc

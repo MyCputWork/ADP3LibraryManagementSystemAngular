@@ -1,4 +1,5 @@
 export interface ClientBook {
+    clientBookId: string
     dateOrdered : string
     clients : Clients;
     books: Books

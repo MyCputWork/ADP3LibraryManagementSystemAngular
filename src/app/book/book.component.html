@@ -1,28 +1,9 @@
 <!-- <p>{{SelectedValueAuthor.authorId}}</p> -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-   <a class="navbar-brand" style="color:white;">Book Manager</a>
-   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
-      aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-   </button>
-   <div class="collapse navbar-collapse" id="navbarColor02">
-      <ul class="navbar-nav mr-auto">
-         <li class="nav-item active">
-            <a class="nav-link" (click)="onOpenModal(null, 'add')"> Book <span class="sr-only">(current)</span></a>
-         </li>
-         <li class="nav-item active">
-            <a class="nav-link" routerLink="/genre">Genre <span class="sr-only">(current)</span></a>
-         </li>
-         <li class="nav-item active">
-            <a class="nav-link" routerLink="/author">Author <span class="sr-only">(current)</span></a>
-         </li>
-      </ul>
-   </div>
-</nav>
 <app-navbar></app-navbar>
+
 <div class='d-flex justify-content-around'>
-   <p></p>
+   <button type="button" (click)="onOpenModal(null, 'add')" class="btn btn-primary">Add Book</button>
    <p></p>
    <button (click)="ToggleAssignClient()">
       <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-filter "
@@ -107,8 +88,8 @@
                <form [formGroup]="addBookForm" (ngSubmit)="addBook()">
 
                   <div class="form-group">
-                     <label for="name">bookId</label>
-                     <input type="text" name="bookId" class="form-control" id="bookId" placeholder="bookId"
+                     <label for="name">ISBN</label>
+                     <input type="text" name="bookId" class="form-control" id="bookId" placeholder="ISBN"
                         formControlName="bookId" required>
                   </div>
 
@@ -207,7 +188,7 @@
                   <div class="form-group">
                      <label for="phone">Image URL</label>
                      <input type="text" name="imgUrl" class="form-control" formControlName="imgUrl" id="imgUrl"
-                        placeholder="Image URL" required>
+                        placeholder="Image URL" >
                   </div>
 
                   <div class="modal-footer">
@@ -242,7 +223,7 @@
                         placeholder="Name" formControlName="bookName" ngModel="{{editBook?.bookName}}">
                   </div>
 
-                  <input type="hidden" name="bookId" class="form-control" id="id" placeholder="bookId"
+                  <input type="hidden" name="bookId" class="form-control" id="id" placeholder="ISBN"
                      formControlName="bookId" ngModel="{{editBook?.bookId}}">
 
 
@@ -386,7 +367,7 @@
                <p>Are you sure you want to delete book {{deleteBook?.bookName}}?</p>
                <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                  <button (click)="onDeleteBook(deleteBook?.bookId)" class="btn btn-danger"
+                  <button (click)="onDeleteBook(deleteBook)" class="btn btn-danger"
                      data-dismiss="modal">Yes</button>
                </div>
             </div>

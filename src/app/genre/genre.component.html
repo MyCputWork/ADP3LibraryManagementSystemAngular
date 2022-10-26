@@ -9,12 +9,12 @@
            <tr>
               <td>
                  <label for="exampleInputEmail1">Genre Id</label>
-                 <input style="width: 60%;" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                 <input style="width: 60%;" class="form-control" type="search" name="key" (ngModelChange)="searchGenreId(key.value)" #key="ngModel" ngModel aria-describedby="emailHelp"
                     placeholder="Filter by Genre Id">
               </td>
               <td>
                  <label for="exampleInputEmail1">Genre Name</label>
-                 <input style="width: 60%;" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                 <input style="width: 60%;" class="form-control" type="search" name="key2" (ngModelChange)="searchGenreName(key2.value)" #key2="ngModel" ngModel aria-describedby="emailHelp"
                     placeholder="Filter by Genre Name">
               </td>
            </tr>
@@ -27,38 +27,11 @@
             </div>
         </div>
         <div class="col-md-6 ">
-            <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3 mr-5">
+            <div class="d-flex flex-wrap align-items-center justify-content-end gap-2  mr-5">
                 <div class="mr-5">
-                    <ul class="nav nav-pills ">
-                        <li class="nav-item">
-                            <a
-                                aria-current="page"
-                                href="#"
-                                class="router-link-active router-link-exact-active nav-link active"
-                                data-bs-toggle="tooltip"
-                                data-bs-placement="top"
-                                title=""
-                                data-bs-original-title="List"
-                                aria-label="List"
-                            >
-                                <i class="bx bx-list-ul"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Grid" aria-label="Grid"><i class="bx bx-grid-alt"></i></a>
-                        </li>
-                    </ul>
                 </div>
                 <div>
                     <a (click)="onOpenModal(null, 'add')" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i class="bx bx-plus me-1"></i> Add New</a>
-                </div>
-                <div class="dropdown">
-                    <a class="btn btn-link text-muted py-1 font-size-16 shadow-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bx bx-dots-horizontal-rounded"></i></a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -120,8 +93,8 @@
           <form [formGroup]="addGenreForm" (ngSubmit)="addGenre()">
 
              <div class="form-group">
-                <label for="name">genreName</label>
-                <input type="text" name="genreName" class="form-control" id="genreName" placeholder="genreName"
+                <label for="name">Genre Name</label>
+                <input type="text" name="genreName" class="form-control" id="genreName" placeholder="Genre Name"
                    formControlName="genreName" required>
              </div>
 
@@ -162,7 +135,7 @@
                 <div class="form-group">
                    <label for="name">Genre Name</label>
                    <input type="text" name="genreName" class="form-control" id="genreName" aria-describedby="emailHelp"
-                      placeholder="genreName" formControlName="genreName" ngModel="{{editGenre?.genreName}}">
+                      placeholder="Genre Name" formControlName="genreName" ngModel="{{editGenre?.genreName}}">
                 </div>
                 <!-- for description -->
                 <!-- <div class="form-group">

@@ -5,6 +5,15 @@ body {
   background: #f5f5f5;
 }
 
+.borderless  {
+    padding: 0%;
+    
+}
+
+.borderless td, .borderless th {
+    border: none;
+}
+
 a {
   cursor: pointer;
 }
