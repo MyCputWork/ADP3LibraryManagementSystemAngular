@@ -1,20 +1,794 @@
-<div class="container">
-    <form [formGroup]="form" (ngSubmit)="submitForm()">
-       <div class="form-group input-group-lg">
-          <input class="form-control" placeholder="clientId" formControlName="clientId">
-       </div>
-       <div class="form-group input-group-lg">
-          <input class="form-control" placeholder="firstName" formControlName="firstName">
-       </div>
-       <div class="form-group input-group-lg">
-          <input class="form-control" placeholder="middleName" formControlName="middleName">
-       </div>
-       <div class="form-group input-group-lg">
-          <input class="form-control" placeholder="lastName" formControlName="lastName">
-       </div>
-       <div class="form-group">
-          <button class="btn btn-danger btn-block btn-lg">Create</button>
-       </div>
-    </form>
- </div>
- 
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.0/css/boxicons.min.css" integrity="sha512-pVCM5+SN2+qwj36KonHToF2p1oIvoU3bsqxphdOIWMYmgr4ZqD3t5DjKvvetKhXGc/ZG5REYTT6ltKfExEei/Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css" integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous" />
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+   <a class="navbar-brand" style="color:white;">Client Details</a>
+   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+      aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+   </button>
+   <div class="collapse navbar-collapse" id="navbarColor02">
+      <ul class="navbar-nav mr-auto">
+         <li class="nav-item active">
+            <a class="nav-link" (click)="onOpenModal(null,null,null, null, 'add')">Add Client<span
+                  class="sr-only">(current)</span></a>
+         </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0">
+         <input type="search" (ngModelChange)="searchClientById(key.value)" #key="ngModel" ngModel name="key"
+            id="searchName" class="form-control mr-sm-2" placeholder="Search by client ID..." required>
+      </form>
+   </div>
+</nav>
+
+<div class="container" id="main-container">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <h5 class="card-title">Library Clients<span class="text-muted fw-normal ms-2"></span></h5>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-15">
+            <div class="">
+                <div class="table-responsive">
+                    <table class="table project-list-table table-nowrap align-middle table-borderless">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="ps-4" style="width: 50px;">
+                                </th>
+                                <th scope="col">ID</th>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Middle Name</th>
+                                <th scope="col">Last Name</th>
+                                <th scope="col" style="width: 200px;">Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody *ngFor="let client of clients">
+                            <tr>
+                                <th scope="row" class="ps-4">
+                                 <a href=""><img
+                                    src="https://static.vecteezy.com/system/resources/previews/002/318/271/original/user-profile-icon-free-vector.jpg"
+                                    alt="" class="img-fluid rounded-circle w-60"></a>
+                                </th>
+                                <td><span class="badge badge-soft-success mb-0">{{client?.clientId}}</span></td>
+                                <td>{{client?.name?.firstName}}</td>
+                                <td>{{client?.name?.middleName}}</td>
+                                <td>{{client?.name?.lastName}}</td>
+                                <td>
+                                    <ul class="list-inline mb-0">
+                                        <li class="list-inline-item">
+                                          <a (click)="onOpenModal(client, clientAddress,clientContact,contact,'view')"
+                                          class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip"
+                                          data-original-title="View"><i class="fa fa-eye"></i></a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                          <a (click)="onOpenModal(client, clientAddress,clientContact,contact,'edit')"
+                                          class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip"
+                                          data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                          <a (click)="onOpenModal(client, clientAddress,clientContact,contact,'delete')"
+                                          class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip"
+                                          data-original-title="Delete"><i class="fa fa-times"></i></a>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+   <!-- Adds a new client -->
+   <div class="modal fade" id="addClientModal" tabindex="-1" role="dialog" aria-labelledby="addClientModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="addClientModalLabel">Client Details</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+
+            <div class="modal-body">
+               <form [formGroup]="formAdd" (ngSubmit)="submitForm()" novalidate>
+                  <h5>Personal Details</h5>
+                  <div class="form-group input-group-lg">
+                     <label for="idnumber">Identity Number*</label>
+                     <input class="form-control" placeholder="Enter Client ID" formControlName="clientId" maxlength="13"
+                        required>
+                  </div>
+                  <div
+                     *ngIf="formAdd.controls['clientId'].invalid && (formAdd.controls['clientId'].dirty || formAdd.controls['clientId'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="formAdd.controls['clientId'].errors.required">
+                        Client ID required (Digits only).
+                     </div>
+                  </div>
+
+                  <div class="form-group input-group-lg">
+                     <label for="firstname">First Name*</label>
+                     <input class="form-control" placeholder="Enter First Name" formControlName="firstName"
+                        maxlength="20" required>
+                  </div>
+                  <div
+                     *ngIf="formAdd.controls['firstName'].invalid && (formAdd.controls['firstName'].dirty || formAdd.controls['firstName'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="formAdd.controls['firstName'].errors.required">
+                        Client first name required (Text characters only).
+                     </div>
+                  </div>
+
+                  <div class="form-group input-group-lg">
+                     <label for="middlename">Middle Name</label>
+                     <input class="form-control" placeholder="Enter Middle Name" formControlName="middleName"
+                        maxlength="20">
+                  </div>
+
+                  <div class="form-group input-group-lg">
+                     <label for="lastname">Last Name*</label>
+                     <input class="form-control" placeholder="Enter Last Name" formControlName="lastName" maxlength="20"
+                        required>
+                  </div>
+                  <div
+                     *ngIf="formAdd.controls['lastName'].invalid && (formAdd.controls['lastName'].dirty || formAdd.controls['lastName'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="formAdd.controls['lastName'].errors.required">
+                        Client last name required (Text characters only)
+                     </div>
+                  </div>
+
+                  <h4>‎</h4>
+                  <h5>Address</h5>
+                  <div class="form-group">
+                     <label for="unitNumber">Unit Number</label>
+                     <input class="form-control" placeholder="Unit Number" formControlName="unitNumber" maxlength="5">
+                  </div>
+                  <div
+                     *ngIf="formAdd.controls['unitNumber'].invalid && (formAdd.controls['unitNumber'].dirty || formAdd.controls['unitNumber'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="formAdd.controls['unitNumber'].errors.required">
+                        Unit number must be digits (If you reside in a complex)
+                     </div>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="complexName">Complex Name (If staying at complex)</label>
+                     <input class="form-control" placeholder="Complex Name" formControlName="complexName" type="text"
+                        maxlength="20">
+                  </div>
+                  <div
+                     *ngIf="formAdd.controls['complexName'].invalid && (formAdd.controls['complexName'].dirty || formAdd.controls['complexName'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="formAdd.controls['complexName'].errors.required">
+                        Complex name must be text characters (If residing in a complex)
+                     </div>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="streetNumber">Street Number</label>
+                     <input class="form-control" placeholder="Street Number" formControlName="streetNumber"
+                        maxlength="4">
+                  </div>
+                  <div
+                     *ngIf="formAdd.controls['streetNumber'].invalid && (formAdd.controls['streetNumber'].dirty || formAdd.controls['streetNumber'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="formAdd.controls['streetNumber'].errors.required">
+                        Street number required (Digits only).
+                     </div>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="streetName">Street Name*</label>
+                     <input class="form-control" placeholder="Street Name" formControlName="streetName" maxlength="20"
+                        required>
+                  </div>
+                  <div
+                     *ngIf="formAdd.controls['streetName'].invalid && (formAdd.controls['streetName'].dirty || formAdd.controls['streetName'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="formAdd.controls['streetName'].errors.required">
+                        Street name required (Text characters only)
+                     </div>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="postalCode">Postal Code*</label>
+                     <input class="form-control" placeholder="Postal Code" formControlName="postalCode" maxlength="4"
+                        required>
+                  </div>
+                  <div
+                     *ngIf="formAdd.controls['postalCode'].invalid && (formAdd.controls['postalCode'].dirty || formAdd.controls['postalCode'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="formAdd.controls['postalCode'].errors.required">
+                        Postal code required (Digits only).
+                     </div>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="postalcode">City Id*</label>
+                     <select class="select2 form-control select2-hidden-accessible"
+                        data-select2-placeholder="Select city ID" tabindex="-1" aria-hidden="true" formControlName="id"
+                        required>
+                        <option data-select2-id="select2-data-3-ibs9">-select city id-</option>
+                        <option value="CPT">CPT</option>
+                        <option value="KBY">KBY</option>
+                        <option value="PE">PE</option>
+                        <option value="PTA">PTA</option>
+                        <option value="POL">POL</option>
+                        <option value="DBN">DBN</option>
+                        <option value="MFK">MFK</option>
+                        <option value="BFN">BFN</option>
+                        <option value="JHB">JHB</option>
+                     </select><span class="select2 select2-container select2-container--bootstrap-5" dir="ltr"
+                        data-select2-id="select2-data-2-46y9" style="width: 391px;"><span class="selection"><span
+                              class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true"
+                              aria-expanded="false" tabindex="0" aria-disabled="false"
+                              aria-labelledby="select2-vp8l-container" aria-controls="select2-vp8l-container"><span
+                                 class="select2-selection__rendered" id="select2-vp8l-container" role="textbox"
+                                 aria-readonly="true" title="Select country"><span
+                                    class="select2-selection__placeholder">Select city id</span></span><span
+                                 class="select2-selection__arrow" role="presentation"><b
+                                    role="presentation"></b></span></span></span><span class="dropdown-wrapper"
+                           aria-hidden="true"></span></span>
+                  </div>
+                  <div class="form-group">
+                     <label for="postalcode">City Name*</label>
+                     <select class="select2 form-control select2-hidden-accessible"
+                        data-select2-placeholder="Select City Name" tabindex="-1" aria-hidden="true"
+                        formControlName="name" required>
+                        <option data-select2-id="select2-data-3-ibs9">-select city name-</option>
+                        <option value="Cape Town">Cape Town</option>
+                        <option value="Kimberley">Kimberley</option>
+                        <option value="Port Elizabeth">Port Elizabeth</option>
+                        <option value="Pretoria">Pretoria</option>
+                        <option value="Polokwane">Polokwane</option>
+                        <option value="Durban">Durban</option>
+                        <option value="Mafikeng">Mafikeng</option>
+                        <option value="Bloemfontein">Bloemfontein</option>
+                        <option value="Johannesburg">Johannesburg</option>
+                     </select><span class="select2 select2-container select2-container--bootstrap-5" dir="ltr"
+                        data-select2-id="select2-data-2-46y9" style="width: 391px;"><span class="selection"><span
+                              class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true"
+                              aria-expanded="false" tabindex="0" aria-disabled="false"
+                              aria-labelledby="select2-vp8l-container" aria-controls="select2-vp8l-container"><span
+                                 class="select2-selection__rendered" id="select2-vp8l-container" role="textbox"
+                                 aria-readonly="true" title="Select country"><span
+                                    class="select2-selection__placeholder">Select city name</span></span><span
+                                 class="select2-selection__arrow" role="presentation"><b
+                                    role="presentation"></b></span></span></span><span class="dropdown-wrapper"
+                           aria-hidden="true"></span></span>
+                  </div>
+                  <div class="form-group">
+                     <label for="suburb">Suburb*</label>
+                     <input class="form-control" formControlName="suburb" placeholder="Suburb Name" maxlength="20"
+                        required>
+                  </div>
+                  <div
+                     *ngIf="formAdd.controls['suburb'].invalid && (formAdd.controls['suburb'].dirty || formAdd.controls['suburb'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="formAdd.controls['suburb'].errors.required">
+                        Suburb name required (Text characters only).
+                     </div>
+                  </div>
+
+                  <h4>‎</h4>
+                  <h5>Contact Details</h5>
+                  <div class="form-group">
+                     <label for="cell">Contact ID</label>
+                     <input class="form-control" placeholder="Contact ID" formControlName="contactId" maxlength="4"
+                        required>
+                  </div>
+                  <div
+                     *ngIf="formAdd.controls['contactId'].invalid && (formAdd.controls['contactId'].dirty || formAdd.controls['contactId'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="formAdd.controls['contactId'].errors.required">
+                        Contact ID required (First 2 digits and last 2 digits of your mobile number).
+                     </div>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="email">Email Address*</label>
+                     <input class="form-control" placeholder="Email Address" formControlName="email" type="email"
+                        required>
+                  </div>
+                  <div
+                     *ngIf="formAdd.controls['email'].invalid && (formAdd.controls['email'].dirty || formAdd.controls['email'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="formAdd.controls['email'].errors.required">
+                        A valid email address is required (Include '@' in your email).
+                     </div>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="cell">Cell Number*</label>
+                     <input class="form-control" placeholder="Cellphone Number" formControlName="cell" maxlength="10"
+                        required>
+                  </div>
+                  <div
+                     *ngIf="formAdd.controls['cell'].invalid && (formAdd.controls['cell'].dirty || formAdd.controls['cell'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="formAdd.controls['cell'].errors.required">
+                        Mobile number required (Digits only).
+                     </div>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="nextofKin">Next Of Kin Contact Number*</label>
+                     <input class="form-control" placeholder="Next Of Kin Number" formControlName="nextOfKin"
+                        maxlength="10" required>
+                  </div>
+                  <div
+                     *ngIf="formAdd.controls['nextOfKin'].invalid && (formAdd.controls['nextOfKin'].dirty || formAdd.controls['nextOfKin'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="formAdd.controls['nextOfKin'].errors.required">
+                        Mobile number required (Digits only).
+                     </div>
+                  </div>
+
+                  <div class="modal-footer">
+                     <button type="button" id="add-client-form" class="btn btn-secondary"
+                        data-dismiss="modal">Close</button>
+                     <button [disabled]="formAdd.invalid" type="submit" class="btn btn-danger btn-block btn-lg"
+                        class="btn btn-primary">Create</button>
+                  </div>
+               </form>
+               <!-- <p>Process: {{ form.value | json }}</p> -->
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- Update client details -->
+   <div class="modal fade" id="updateClientModal" tabindex="-1" role="dialog" aria-labelledby="clientEditModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="updateClientModalLabel">Update Client Details</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+
+            <div class="modal-body">
+               <form [formGroup]="form" (ngSubmit)="updateClientDetails()" novalidate>
+                  <h5>Personal Details</h5>
+                  <div class="form-group input-group-lg">
+                     <label for="idnumber">Identity Number*</label>
+                     <input class="form-control" [ngModel]="editClient?.clientId" formControlName="clientId"
+                        placeholder="Enter Identity Number" maxlength="13" required>
+                  </div>
+                  <div
+                     *ngIf="form.controls['clientId'].invalid && (form.controls['clientId'].dirty || form.controls['clientId'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="form.controls['clientId'].errors.required">
+                        Client ID required (Digits only).
+                     </div>
+                  </div>
+
+                  <div class="form-group input-group-lg">
+                     <label for="firstname">First Name*</label>
+                     <input class="form-control" [ngModel]="editClient?.name?.firstName" formControlName="firstName"
+                        placeholder="Enter First Name" minlength="2" maxlength="20" required>
+                  </div>
+                  <div
+                     *ngIf="form.controls['firstName'].invalid && (form.controls['firstName'].dirty || form.controls['firstName'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="form.controls['firstName'].errors.required">
+                        Client first name required (Text characters only)
+                     </div>
+                  </div>
+
+                  <div class="form-group input-group-lg">
+                     <label for="middlename">Middle Name</label>
+                     <input class="form-control" [ngModel]="editClient?.name?.middleName" formControlName="middleName"
+                        placeholder="Enter Middle Name" minlength="2" maxlength="20">
+                  </div>
+
+                  <div class="form-group input-group-lg">
+                     <label for="lastname">Last Name*</label>
+                     <input class="form-control" [ngModel]="editClient?.name?.lastName" formControlName="lastName"
+                        placeholder="Enter Last Name" minlength="2" maxlength="20" required>
+                  </div>
+                  <div
+                     *ngIf="form.controls['lastName'].invalid && (form.controls['lastName'].dirty || form.controls['lastName'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="form.controls['lastName'].errors.required">
+                        Client last name required (Text characters only).
+                     </div>
+                  </div>
+
+                  <h4>‎</h4>
+                  <h5>Address</h5>
+                  <div class="form-group">
+                     <label for="unitNumber">Unit Number</label>
+                     <input class="form-control" [ngModel]="editClientAddress?.address?.unitNumber"
+                        placeholder="Unit Number" formControlName="unitNumber" minlength="1" maxlength="5">
+                  </div>
+                  <div class="form-group">
+                     <label for="complexName">Complex Name (If staying at complex)</label>
+                     <input class="form-control" [ngModel]="editClientAddress?.address?.complexName"
+                        placeholder="Complex Name" formControlName="complexName" minlength="2" maxlength="20">
+                  </div>
+                  <div class="form-group">
+                     <label for="streetNumber">Street Number</label>
+                     <input class="form-control" placeholder="Street Number"
+                        [ngModel]="editClientAddress?.address?.streetNumber" formControlName="streetNumber"
+                        minlength="1" maxlength="4" required>
+                  </div>
+                  <div
+                     *ngIf="form.controls['streetNumber'].invalid && (form.controls['streetNumber'].dirty || form.controls['streetNumber'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="form.controls['streetNumber'].errors.required">
+                        Street number required (Digits only).
+                     </div>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="streetName">Street Name*</label>
+                     <input class="form-control" placeholder="Street Name"
+                        [ngModel]="editClientAddress?.address?.streetName" formControlName="streetName" minlength="2"
+                        maxlength="20" required>
+                  </div>
+                  <div
+                     *ngIf="form.controls['streetName'].invalid && (form.controls['streetName'].dirty || form.controls['streetName'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="form.controls['streetName'].errors.required">
+                        Street name required (Text characters only).
+                     </div>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="postalCode">Postal Code*</label>
+                     <input class="form-control" placeholder="Postal Code"
+                        [ngModel]="editClientAddress?.address?.postalCode" formControlName="postalCode" maxlength="4"
+                        required>
+                  </div>
+                  <div
+                     *ngIf="form.controls['postalCode'].invalid && (form.controls['postalCode'].dirty || form.controls['postalCode'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="form.controls['postalCode'].errors.required">
+                        Postal code required (Digits only).
+                     </div>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="id">City Id*</label>
+                     <select class="select2 form-control select2-hidden-accessible"
+                        data-select2-placeholder="Select city ID" data-select2-id="select2-data-1-gy14" tabindex="-1"
+                        aria-hidden="true" formControlName="id" [ngModel]="editClientAddress?.address?.id" required>
+                        <option data-select2-id="select2-data-3-ibs9">-select city id-</option>
+                        <option value="CPT">CPT</option>
+                        <option value="KBY">KBY</option>
+                        <option value="PE">PE</option>
+                        <option value="PTA">PTA</option>
+                        <option value="POL">POL</option>
+                        <option value="DBN">DBN</option>
+                        <option value="MFK">MFK</option>
+                        <option value="BFN">BFN</option>
+                        <option value="JHB">JHB</option>
+                     </select><span class="select2 select2-container select2-container--bootstrap-5" dir="ltr"
+                        data-select2-id="select2-data-2-46y9" style="width: 391px;"><span class="selection"><span
+                              class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true"
+                              aria-expanded="false" tabindex="0" aria-disabled="false"
+                              aria-labelledby="select2-vp8l-container" aria-controls="select2-vp8l-container"><span
+                                 class="select2-selection__rendered" id="select2-vp8l-container" role="textbox"
+                                 aria-readonly="true" title="Select country"><span
+                                    class="select2-selection__placeholder">Select city id</span></span><span
+                                 class="select2-selection__arrow" role="presentation"><b
+                                    role="presentation"></b></span></span></span><span class="dropdown-wrapper"
+                           aria-hidden="true"></span></span>
+                  </div>
+                  <div class="form-group">
+                     <label for="postalcode">City Name*</label>
+                     <select class="select2 form-control select2-hidden-accessible"
+                        data-select2-placeholder="Select City Name" data-select2-id="select2-data-1-gy14" tabindex="-1"
+                        aria-hidden="true" formControlName="name" [ngModel]="editClientAddress?.address?.name" required>
+                        <option data-select2-id="select2-data-3-ibs9">-select city name-</option>
+                        <option value="Cape Town">Cape Town</option>
+                        <option value="Kimberley">Kimberley</option>
+                        <option value="Port Elizabeth">Port Elizabeth</option>
+                        <option value="Pretoria">Pretoria</option>
+                        <option value="Polokwane">Polokwane</option>
+                        <option value="Durban">Durban</option>
+                        <option value="Mafikeng">Mafikeng</option>
+                        <option value="Bloemfontein">Bloemfontein</option>
+                        <option value="Johannesburg">Johannesburg</option>
+                        <option value="JHB">Johannesburg</option>
+                     </select><span class="select2 select2-container select2-container--bootstrap-5" dir="ltr"
+                        data-select2-id="select2-data-2-46y9" style="width: 391px;"><span class="selection"><span
+                              class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true"
+                              aria-expanded="false" tabindex="0" aria-disabled="false"
+                              aria-labelledby="select2-vp8l-container" aria-controls="select2-vp8l-container"><span
+                                 class="select2-selection__rendered" id="select2-vp8l-container" role="textbox"
+                                 aria-readonly="true" title="Select country"><span
+                                    class="select2-selection__placeholder">Select city name</span></span><span
+                                 class="select2-selection__arrow" role="presentation"><b
+                                    role="presentation"></b></span></span></span><span class="dropdown-wrapper"
+                           aria-hidden="true"></span></span>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="suburb">Suburb*</label>
+                     <input class="form-control" placeholder="Suburb Name" type="text"
+                        [ngModel]="editClientAddress?.address?.city?.suburb" formControlName="suburb" maxlength="20" required>
+                  </div>
+                  <div
+                     *ngIf="form.controls['suburb'].invalid && (form.controls['suburb'].dirty || form.controls['suburb'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="form.controls['suburb'].errors.required">
+                        Suburb name required (Text characters only).
+                     </div>
+                  </div>
+
+                  <h4>‎</h4>
+                  <h5>Contact Details</h5>
+                  <div class="form-group">
+                     <label for="contactId">Contact ID</label>
+                     <input class="form-control" [ngModel]="editContact?.contactId" placeholder="Contact ID"
+                        formControlName="contactId" maxlength="4" required>
+                  </div>
+                  <div
+                     *ngIf="form.controls['contactId'].invalid && (form.controls['contactId'].dirty || form.controls['contactId'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="form.controls['contactId'].errors.required">
+                        Contact ID required (Digits only).
+                     </div>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="email">Email Address*</label>
+                     <input type="text" [ngModel]="editContact?.email" class="form-control" formControlName="email"
+                        placeholder="Email Address" maxlength="25" required>
+                  </div>
+                  <div
+                     *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="form.controls['email'].errors.required">
+                        A valid email address is required (Include '@' in your email).
+                     </div>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="cell">Cell Number*</label>
+                     <input type="text" [ngModel]="editContact?.cell" formControlName="cell" class="form-control"
+                        placeholder="Cellphone Number" maxlength="10" required>
+                  </div>
+                  <div
+                     *ngIf="form.controls['cell'].invalid && (form.controls['cell'].dirty || form.controls['cell'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="form.controls['cell'].errors.required">
+                        Mobile number required (Digits only).
+                     </div>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="nextOfKin">Next Of Kin Contact Number*</label>
+                     <input type="text" [ngModel]="editContact?.nextOfKin" formControlName="nextOfKin"
+                        class="form-control" placeholder="Next Of Kin Number" maxlength="10" required>
+                  </div>
+                  <div
+                     *ngIf="form.controls['nextOfKin'].invalid && (form.controls['nextOfKin'].dirty || form.controls['nextOfKin'].touched)"
+                     class="alert alert-danger">
+                     <div *ngIf="form.controls['nextOfKin'].errors.required">
+                        Mobile number required (Digits only).
+                     </div>
+                  </div>
+
+                  <div class="modal-footer">
+                     <button type="button" id="" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                     <button class="btn btn-danger btn-block btn-lg"
+                        class="btn btn-primary">Update</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- Delete Client -->
+   <div class="modal fade" id="deleteClientModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="deleteModelLabel">Delete Client</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <p>Are you sure you want to delete client: {{deleteClient?.name?.firstName}} with client ID:
+                  {{deleteClient?.clientId}}?</p>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                  <button (click)="onDeleteClient(deleteClient?.clientId)" class="btn btn-danger"
+                     data-dismiss="modal">Yes</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+<!-- </div> -->
+
+<!-- View All Details -->
+<div class="modal fade" id="viewClientModal" tabindex="-1" role="dialog" aria-labelledby="clientViewModalLabel"
+   aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="viewClientModalLabel">Full Client Details</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form [formGroup]="form" (ngSubmit)="updateClientDetails()">
+               <h5>Personal Details</h5>
+               <div class="form-group input-group-lg">
+                  <label for="idnumber">Identity Number</label>
+                  <input disabled="true" class="form-control" value="{{editClient?.clientId}}"
+                     formControlName="clientId">
+               </div>
+               <div class="form-group input-group-lg">
+                  <label for="firstname">First Name*</label>
+                  <input disabled="true" class="form-control" value="{{editClient?.name?.firstName}}"
+                     placeholder="Enter First Name" formControlName="firstName">
+               </div>
+               <div class="form-group input-group-lg">
+                  <label for="middlename">Middle Name</label>
+                  <input disabled="true" class="form-control" value="{{editClient?.name?.middleName}}"
+                     placeholder="Enter Middle Name" formControlName="middleName">
+               </div>
+
+               <div class="form-group input-group-lg">
+                  <label for="lastname">Last Name*</label>
+                  <input disabled="true" class="form-control" value="{{editClient?.name?.lastName}}"
+                     placeholder="Enter Last Name" formControlName="lastName">
+               </div>
+
+               <h4>‎</h4>
+               <h5>Address</h5>
+               <div class="form-group input-group-lg">
+                  <label for="unitNumber">Unit Number</label>
+                  <input disabled="true" class="form-control" value="{{editClientAddress?.address?.unitNumber}}"
+                     formControlName="unitNumber">
+               </div>
+               <div class="form-group input-group-lg">
+                  <label for="complexName">Complex Name</label>
+                  <input disabled="true" class="form-control" value="{{editClientAddress?.address?.complexName}}"
+                     formControlName="complexName">
+               </div>
+               <div class="form-group input-group-lg">
+                  <label for="streetNumber">Street Number</label>
+                  <input disabled="true" class="form-control" value="{{editClientAddress?.address?.streetNumber}}"
+                     formControlName="streetNumber">
+               </div>
+               <div class="form-group input-group-lg">
+                  <label for="streetName">Street Name</label>
+                  <input disabled="true" class="form-control" value="{{editClientAddress?.address?.streetName}}"
+                     formControlName="streetName">
+               </div>
+               <div class="form-group input-group-lg">
+                  <label for="postalCode">Postal Code</label>
+                  <input disabled="true" class="form-control" value="{{editClientAddress?.address?.postalCode}}"
+                     formControlName="postalCode">
+               </div>
+               <div class="form-group">
+                  <label for="postalcode">City Id*</label>
+                  <select disabled="true" class="select2 form-control select2-hidden-accessible"
+                     data-select2-placeholder="Select city ID" data-select2-id="select2-data-1-gy14" tabindex="-1"
+                     aria-hidden="true" formControlName="id">
+                     <option data-select2-id="select2-data-3-ibs9">-select city id-</option>
+                     <option value="CPT">CPT</option>
+                     <option value="KBY">KBY</option>
+                     <option value="PE">PE</option>
+                     <option value="PTA">PTA</option>
+                     <option value="POL">POL</option>
+                     <option value="DBN">DBN</option>
+                     <option value="MFK">MFK</option>
+                     <option value="BFN">BFN</option>
+                     <option value="JHB">JHB</option>
+                  </select><span class="select2 select2-container select2-container--bootstrap-5" dir="ltr"
+                     data-select2-id="select2-data-2-46y9" style="width: 391px;"><span class="selection"><span
+                           class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true"
+                           aria-expanded="false" tabindex="0" aria-disabled="false"
+                           aria-labelledby="select2-vp8l-container" aria-controls="select2-vp8l-container"><span
+                              class="select2-selection__rendered" id="select2-vp8l-container" role="textbox"
+                              aria-readonly="true" title="Select country"><span
+                                 class="select2-selection__placeholder">Select city id</span></span><span
+                              class="select2-selection__arrow" role="presentation"><b
+                                 role="presentation"></b></span></span></span><span class="dropdown-wrapper"
+                        aria-hidden="true"></span></span>
+               </div>
+               <div class="form-group">
+                  <label for="postalcode">City Name*</label>
+                  <select disabled="true" class="select2 form-control select2-hidden-accessible"
+                     data-select2-placeholder="Select City Name" data-select2-id="select2-data-1-gy14" tabindex="-1"
+                     aria-hidden="true" formControlName="name">
+                     <option data-select2-id="select2-data-3-ibs9">-select city name-</option>
+                     <option value="Cape Town">Cape Town</option>
+                     <option value="Kimberley">Kimberley</option>
+                     <option value="Port Elizabeth">Port Elizabeth</option>
+                     <option value="Pretoria">Pretoria</option>
+                     <option value="Polokwane">Polokwane</option>
+                     <option value="Durban">Durban</option>
+                     <option value="Mafikeng">Mafikeng</option>
+                     <option value="Bloemfontein">Bloemfontein</option>
+                     <option value="Johannesburg">Johannesburg</option>
+                     <option value="JHB">Johannesburg</option>
+                  </select><span class="select2 select2-container select2-container--bootstrap-5" dir="ltr"
+                     data-select2-id="select2-data-2-46y9" style="width: 391px;"><span class="selection"><span
+                           class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true"
+                           aria-expanded="false" tabindex="0" aria-disabled="false"
+                           aria-labelledby="select2-vp8l-container" aria-controls="select2-vp8l-container"><span
+                              class="select2-selection__rendered" id="select2-vp8l-container" role="textbox"
+                              aria-readonly="true" title="Select country"><span
+                                 class="select2-selection__placeholder">Select city name</span></span><span
+                              class="select2-selection__arrow" role="presentation"><b
+                                 role="presentation"></b></span></span></span><span class="dropdown-wrapper"
+                        aria-hidden="true"></span></span>
+               </div>
+
+               <div class="form-group">
+                  <label for="suburb">Suburb*</label>
+                  <input disabled="true" class="form-control" placeholder="Suburb Name" type="text"
+                     value="{{editClientAddress?.address?.city?.suburb}}" formControlName="suburb">
+               </div>
+
+               <!-- <h4>‎</h4>
+               <h5>Contact Details</h5>
+               <div class="form-group">
+                  <label for="cell">Client ContactID*</label>
+                  <input disabled="true" class="form-control" value="{{editClientContact?.clientContactId}}"
+                     formControlName="clientContactId" placeholder="Client Contact ID" maxlength="5">
+               </div>
+
+               <div class="form-group">
+                  <label for="cell">Contact ID</label>
+                  <input disabled="true" class="form-control" value="{{editContact?.contactId}}"
+                     placeholder="Contact ID" formControlName="contactId" maxlength="4">
+               </div>
+
+               <div class="form-group">
+                  <label for="email">Email Address*</label>
+                  <input disabled="true" type="text" value="{{editContact?.email}}" class="form-control"
+                     formControlName="email" placeholder="Email Address">
+               </div>
+               <div class="form-group">
+                  <label for="cell">Cell Number*</label>
+                  <input disabled="true" type="text" value="{{editContact?.cell}}" formControlName="cell"
+                     class="form-control" placeholder="Cellphone Number">
+               </div>
+               <div class="form-group">
+                  <label for="nextofKin">Next Of Kin Contact Number*</label>
+                  <input disabled type="text" value="{{editContact?.nextOfKin}}" formControlName="nextOfKin"
+                     class="form-control" placeholder="Next Of Kin Number">
+               </div> -->
+
+               <div class="modal-footer">
+                  <button type="button" id="add-employee-form" class="btn btn-primary"
+                     data-dismiss="modal">Close</button>
+               </div>
+            </form>
+
+            <!-- Notification for no clients -->
+            <div *ngIf="clients?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+               <div class="alert alert-info" role="alert">
+                  <h4 class="alert-heading">No clients</h4>
+                  <p>No clients were found.</p>
+               </div>
+            </div>

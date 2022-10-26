@@ -9,7 +9,7 @@ import { Book } from "./book";
 })
 
 export class BookService{
-    private apiServerUrl = environment.apiBaseUrl;
+    private apiServerUrl = environment.baseURL;
 
     constructor(private http: HttpClient){ }
 
