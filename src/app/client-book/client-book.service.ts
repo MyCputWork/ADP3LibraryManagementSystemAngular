@@ -31,8 +31,8 @@ public deleteClient(clientBookId : string): Observable<void> {
     return this.http.delete<void>(`${this.apiServerUrl}/librarymanagementsystem/books/deleteBook/${clientBookId}`)
 }
 
-public getClientBooksByClient(client : Client): Observable<ClientBook[]> {
-  return this.http.get<ClientBook[]>(`${this.apiServerUrl}/librarymanagementsystem/clientBook/findClientBookByClient/${client}`)
+public getClientBooksByClientId(clientId : string): Observable<ClientBook[]> {
+  return this.http.get<ClientBook[]>(`${this.apiServerUrl}/librarymanagementsystem/clientBook/clientBooksByClientId/${clientId}`)
 }
 
 }

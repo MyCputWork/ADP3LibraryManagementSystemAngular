@@ -104,8 +104,8 @@ export class ClientBookComponent implements OnInit {
     button.click();
   }
 
-  public getClientBooksByClient(client:Client): void {
-    this.clientBookService.getClientBooksByClient(client).subscribe({next:
+  public getClientBooksByClient(clientId:string): void {
+    this.clientBookService.getClientBooksByClientId(clientId).subscribe({next:
       (response: ClientBook[]) => {
         this.clientBooks = response;
       },

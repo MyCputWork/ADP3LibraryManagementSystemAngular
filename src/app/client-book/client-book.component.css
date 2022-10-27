@@ -13,7 +13,13 @@
 
 .editBtn{
   color: green;
+  cursor: pointer;
 }
 .deleteBtn{
   color: red;
+  cursor: pointer;
+}
+.bookImg{
+  width: 40px;
+  height: 40px;
 }
